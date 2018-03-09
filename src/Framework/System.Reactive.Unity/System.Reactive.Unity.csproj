@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0F915023-EEBC-4220-8DD7-B1504761123F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>System.Reactive.Unity</RootNamespace>
+    <AssemblyName>System.Reactive.Unity</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UnityEngine">
+      <HintPath>..\packages\Unity\UnityEngine.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AotSafeExtensions.cs" />
+    <Compile Include="AsyncOperationExtensions.cs" />
+    <Compile Include="CancellationToken.cs" />
+    <Compile Include="CoroutineAsyncBridge.cs" />
+    <Compile Include="Diagnostics\LogEntry.cs" />
+    <Compile Include="Diagnostics\LogEntryExtensions.cs" />
+    <Compile Include="Diagnostics\Logger.cs" />
+    <Compile Include="Diagnostics\ObservableDebugExtensions.cs" />
+    <Compile Include="Diagnostics\ObservableLogger.cs" />
+    <Compile Include="Diagnostics\UnityDebugSink.cs" />
+    <Compile Include="FrameInterval.cs" />
+    <Compile Include="InspectableReactiveProperty.cs" />
+    <Compile Include="InspectorDisplayDrawer.cs" />
+    <Compile Include="LazyTask.cs" />
+    <Compile Include="LifetimeDisposableExtensions.cs" />
+    <Compile Include="Linq\ObservableExtensions.cs" />
+    <Compile Include="MainThreadDispatcher.cs" />
+    <Compile Include="MainThreadScheduler.cs" />
+    <Compile Include="Observable.Unity.cs" />
+    <Compile Include="ObservableMonoBehaviour.cs" />
+    <Compile Include="ObservableWWW.cs" />
+    <Compile Include="ObserveExtensions.cs" />
+    <Compile Include="Operators\BatchFrame.cs" />
+    <Compile Include="Operators\DelayFrame.cs" />
+    <Compile Include="Operators\DelayFrameSubscription.cs" />
+    <Compile Include="Operators\FrameInterval.cs" />
+    <Compile Include="Operators\FrameTimeInterval.cs" />
+    <Compile Include="Operators\FromCoroutine.cs" />
+    <Compile Include="Operators\RepeatUntil.cs" />
+    <Compile Include="Operators\SampleFrame.cs" />
+    <Compile Include="Operators\SubscribeOnMainThread.cs" />
+    <Compile Include="Operators\ThrottleFirstFrame.cs" />
+    <Compile Include="Operators\ThrottleFrame.cs" />
+    <Compile Include="Operators\TimeoutFrame.cs" />
+    <Compile Include="PresenterBase.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReactiveCollection.cs" />
+    <Compile Include="ReactiveCommand.cs" />
+    <Compile Include="ReactiveDictionary.cs" />
+    <Compile Include="ReactiveProperty.cs" />
+    <Compile Include="ScenePlaybackDetector.cs" />
+    <Compile Include="Toolkit\ObjectPool.cs" />
+    <Compile Include="Triggers\ObservableAnimatorTrigger.cs" />
+    <Compile Include="Triggers\ObservableBeginDragTrigger.cs" />
+    <Compile Include="Triggers\ObservableCancelTrigger.cs" />
+    <Compile Include="Triggers\ObservableCanvasGroupChangedTrigger.cs" />
+    <Compile Include="Triggers\ObservableCollision2DTrigger.cs" />
+    <Compile Include="Triggers\ObservableCollisionTrigger.cs" />
+    <Compile Include="Triggers\ObservableDeselectTrigger.cs" />
+    <Compile Include="Triggers\ObservableDestroyTrigger.cs" />
+    <Compile Include="Triggers\ObservableDragTrigger.cs" />
+    <Compile Include="Triggers\ObservableDropTrigger.cs" />
+    <Compile Include="Triggers\ObservableEnableTrigger.cs" />
+    <Compile Include="Triggers\ObservableEndDragTrigger.cs" />
+    <Compile Include="Triggers\ObservableEventTrigger.cs" />
+    <Compile Include="Triggers\ObservableFixedUpdateTrigger.cs" />
+    <Compile Include="Triggers\ObservableInitializePotentialDragTrigger.cs" />
+    <Compile Include="Triggers\ObservableLateUpdateTrigger.cs" />
+    <Compile Include="Triggers\ObservableMouseTrigger.cs" />
+    <Compile Include="Triggers\ObservableMoveTrigger.cs" />
+    <Compile Include="Triggers\ObservableParticleTrigger.cs" />
+    <Compile Include="Triggers\ObservablePointerClickTrigger.cs" />
+    <Compile Include="Triggers\ObservablePointerDownTrigger.cs" />
+    <Compile Include="Triggers\ObservablePointerEnterTrigger.cs" />
+    <Compile Include="Triggers\ObservablePointerExitTrigger.cs" />
+    <Compile Include="Triggers\ObservablePointerUpTrigger.cs" />
+    <Compile Include="Triggers\ObservableRectTransformTrigger.cs" />
+    <Compile Include="Triggers\ObservableScrollTrigger.cs" />
+    <Compile Include="Triggers\ObservableSelectTrigger.cs" />
+    <Compile Include="Triggers\ObservableStateMachineTrigger.cs" />
+    <Compile Include="Triggers\ObservableSubmitTrigger.cs" />
+    <Compile Include="Triggers\ObservableTransformChangedTrigger.cs" />
+    <Compile Include="Triggers\ObservableTrigger2DTrigger.cs" />
+    <Compile Include="Triggers\ObservableTriggerBase.cs" />
+    <Compile Include="Triggers\ObservableTriggerExtensions.Component.cs" />
+    <Compile Include="Triggers\ObservableTriggerExtensions.cs" />
+    <Compile Include="Triggers\ObservableTriggerTrigger.cs" />
+    <Compile Include="Triggers\ObservableUpdateSelectedTrigger.cs" />
+    <Compile Include="Triggers\ObservableUpdateTrigger.cs" />
+    <Compile Include="Triggers\ObservableVisibleTrigger.cs" />
+    <Compile Include="TypedMonoBehaviour.cs" />
+    <Compile Include="UniRxSynchronizationContext.cs" />
+    <Compile Include="UnityEqualityComparer.cs" />
+    <Compile Include="UnityEventExtensions.cs" />
+    <Compile Include="UnityGraphicExtensions.cs" />
+    <Compile Include="UnityUIComponentExtensions.cs" />
+    <Compile Include="YieldInstructionCache.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Scheduler\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\System.Reactive\System.Reactive.csproj">
+      <Project>{C942D157-084C-4530-A3C7-4D2E96E1CBD7}</Project>
+      <Name>System.Reactive</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
