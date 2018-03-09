@@ -246,25 +246,12 @@ namespace System.Reactive.Linq
             return new RepeatObservable<T>(value, repeatCount, scheduler);
         }
 
-        public static IObservable<T> Repeat<T>(this IObservable<T> source)
-        {
-            return RepeatInfinite(source).Concat();
-        }
-
-        static IEnumerable<IObservable<T>> RepeatInfinite<T>(IObservable<T> source)
+        public static IEnumerable<IObservable<T>> RepeatInfinite<T>(IObservable<T> source)
         {
             while (true)
             {
                 yield return source;
             }
-        }
-
-        /// <summary>
-        /// Same as Repeat() but if arriving contiguous "OnComplete" Repeat stops.
-        /// </summary>
-        public static IObservable<T> RepeatSafe<T>(this IObservable<T> source)
-        {
-            return new RepeatSafeObservable<T>(RepeatInfinite(source), source.IsRequiredSubscribeOnCurrentThread());
         }
 
         public static IObservable<T> Defer<T>(Func<IObservable<T>> observableFactory)

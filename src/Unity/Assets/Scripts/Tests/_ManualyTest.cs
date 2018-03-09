@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Unity;
 using System.Text;
 using UnityEngine.UI;
 using UnityEngine.Scripting;

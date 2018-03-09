@@ -2,9 +2,9 @@
 
 namespace System.Reactive.Linq
 {
-    public partial class Observable
+    public static partial class Observable
     {
-        static IObservable<T> AddRef<T>(IObservable<T> xs, RefCountDisposable r)
+        public static IObservable<T> AddRef<T>(IObservable<T> xs, RefCountDisposable r)
         {
             return Create<T>((observer) => new CompositeDisposable(new []
             {

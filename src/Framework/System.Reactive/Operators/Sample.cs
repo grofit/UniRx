@@ -3,7 +3,7 @@ using System.Reactive.Schedulers;
 
 namespace System.Reactive.Operators
 {
-    internal class SampleObservable<T> : OperatorObservableBase<T>
+    public class SampleObservable<T> : OperatorObservableBase<T>
     {
         readonly IObservable<T> source;
         readonly TimeSpan interval;
@@ -119,7 +119,7 @@ namespace System.Reactive.Operators
         }
     }
 
-    internal class SampleObservable<T, T2> : OperatorObservableBase<T>
+    public class SampleObservable<T, T2> : OperatorObservableBase<T>
     {
         readonly IObservable<T> source;
         readonly IObservable<T2> intervalSource;
