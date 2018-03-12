@@ -10,124 +10,65 @@ namespace System.Reactive.Linq
         /// <para>Repeats the source observable sequence until it successfully terminates.</para>
         /// <para>This is same as Retry().</para>
         /// </summary>
-        public static IObservable<TSource> OnErrorRetry<TSource>(
-            this IObservable<TSource> source)
-        {
-            var result = source.Retry();
-            return result;
-        }
+        public static IObservable<TSource> OnErrorRetry<TSource>(this IObservable<TSource> source) =>
+            Observable.OnErrorRetry(source);
 
         /// <summary>
         /// When catched exception, do onError action and repeat observable sequence.
         /// </summary>
         public static IObservable<TSource> OnErrorRetry<TSource, TException>(
             this IObservable<TSource> source, Action<TException> onError)
-            where TException : Exception
-        {
-            return source.OnErrorRetry(onError, TimeSpan.Zero);
-        }
+            where TException : Exception => Observable.OnErrorRetry(source, onError);
 
         /// <summary>
         /// When catched exception, do onError action and repeat observable sequence after delay time.
         /// </summary>
         public static IObservable<TSource> OnErrorRetry<TSource, TException>(
             this IObservable<TSource> source, Action<TException> onError, TimeSpan delay)
-            where TException : Exception
-        {
-            return source.OnErrorRetry(onError, int.MaxValue, delay);
-        }
+            where TException : Exception => Observable.OnErrorRetry(source, onError, delay);
 
         /// <summary>
         /// When catched exception, do onError action and repeat observable sequence during within retryCount.
         /// </summary>
         public static IObservable<TSource> OnErrorRetry<TSource, TException>(
             this IObservable<TSource> source, Action<TException> onError, int retryCount)
-            where TException : Exception
-        {
-            return source.OnErrorRetry(onError, retryCount, TimeSpan.Zero);
-        }
+            where TException : Exception => Observable.OnErrorRetry(source, onError, retryCount);
 
         /// <summary>
         /// When catched exception, do onError action and repeat observable sequence after delay time during within retryCount.
         /// </summary>
         public static IObservable<TSource> OnErrorRetry<TSource, TException>(
             this IObservable<TSource> source, Action<TException> onError, int retryCount, TimeSpan delay)
-            where TException : Exception
-        {
-            return source.OnErrorRetry(onError, retryCount, delay, Scheduler.DefaultSchedulers.TimeBasedOperations);
-        }
+            where TException : Exception => Observable.OnErrorRetry(source, onError, retryCount, delay);
 
         /// <summary>
         /// When catched exception, do onError action and repeat observable sequence after delay time(work on delayScheduler) during within retryCount.
         /// </summary>
         public static IObservable<TSource> OnErrorRetry<TSource, TException>(
-            this IObservable<TSource> source, Action<TException> onError, int retryCount, TimeSpan delay, IScheduler delayScheduler)
-            where TException : Exception
-        {
-            var result = System.Reactive.Linq.Observable.Defer(() =>
-            {
-                var dueTime = (delay.Ticks < 0) ? TimeSpan.Zero : delay;
-                var count = 0;
+            this IObservable<TSource> source, Action<TException> onError, int retryCount, TimeSpan delay,
+            IScheduler delayScheduler)
+            where TException : Exception => Observable.OnErrorRetry(source, onError, retryCount, delay, delayScheduler);
 
-                IObservable<TSource> self = null;
-                self = source.Catch((TException ex) =>
-                {
-                    onError(ex);
-
-                    return (++count < retryCount)
-                        ? (dueTime == TimeSpan.Zero)
-                            ? self.SubscribeOn(Scheduler.CurrentThread)
-                            : self.DelaySubscription(dueTime, delayScheduler).SubscribeOn(Scheduler.CurrentThread)
-                        : System.Reactive.Linq.Observable.Throw<TSource>(ex);
-                });
-                return self;
-            });
-
-            return result;
-        }
-
-        public static IObservable<T> Finally<T>(this IObservable<T> source, Action finallyAction)
-        {
-            return new FinallyObservable<T>(source, finallyAction);
-        }
+        public static IObservable<T> Finally<T>(this IObservable<T> source, Action finallyAction) =>
+            Observable.Finally(source, finallyAction);
 
         public static IObservable<T> Catch<T, TException>(this IObservable<T> source, Func<TException, IObservable<T>> errorHandler)
-            where TException : Exception
-        {
-            return new CatchObservable<T, TException>(source, errorHandler);
-        }
+            where TException : Exception => Observable.Catch(source, errorHandler);
 
-        public static IObservable<TSource> Catch<TSource>(this IEnumerable<IObservable<TSource>> sources)
-        {
-            return new CatchObservable<TSource>(sources);
-        }
+        public static IObservable<TSource> Catch<TSource>(this IEnumerable<IObservable<TSource>> sources) =>
+            Observable.Catch(sources);
 
         /// <summary>Catch exception and return Observable.Empty.</summary>
-        public static IObservable<TSource> CatchIgnore<TSource>(this IObservable<TSource> source)
-        {
-            return source.Catch<TSource, Exception>(Stubs.CatchIgnore<TSource>);
-        }
+        public static IObservable<TSource> CatchIgnore<TSource>(this IObservable<TSource> source) =>
+            Observable.CatchIgnore(source);
 
         /// <summary>Catch exception and return Observable.Empty.</summary>
         public static IObservable<TSource> CatchIgnore<TSource, TException>(this IObservable<TSource> source, Action<TException> errorAction)
-            where TException : Exception
-        {
-            var result = source.Catch((TException ex) =>
-            {
-                errorAction(ex);
-                return System.Reactive.Linq.Observable.Empty<TSource>();
-            });
-            return result;
-        }
+            where TException : Exception => Observable.CatchIgnore(source, errorAction);
 
-        public static IObservable<TSource> Retry<TSource>(this IObservable<TSource> source)
-        {
-            return Observable.RepeatInfinite(source).Catch();
-        }
+        public static IObservable<TSource> Retry<TSource>(this IObservable<TSource> source) => Observable.Retry(source);
 
-        public static IObservable<TSource> Retry<TSource>(this IObservable<TSource> source, int retryCount)
-        {
-            return System.Linq.Enumerable.Repeat(source, retryCount).Catch();
-        }
+        public static IObservable<TSource> Retry<TSource>(this IObservable<TSource> source, int retryCount) =>
+            Observable.Retry(source, retryCount);
     }
 }

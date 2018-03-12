@@ -3,7 +3,7 @@ using System.Reactive.Schedulers;
 
 namespace System.Reactive.Operators
 {
-    internal class ThrowObservable<T> : OperatorObservableBase<T>
+    public class ThrowObservable<T> : OperatorObservableBase<T>
     {
         readonly Exception error;
         readonly IScheduler scheduler;

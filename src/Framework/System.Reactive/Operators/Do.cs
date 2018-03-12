@@ -4,7 +4,7 @@ namespace System.Reactive.Operators
 {
     // Do, DoOnError, DoOnCompleted, DoOnTerminate, DoOnSubscribe, DoOnCancel
 
-    internal class DoObservable<T> : OperatorObservableBase<T>
+    public class DoObservable<T> : OperatorObservableBase<T>
     {
         readonly IObservable<T> source;
         readonly Action<T> onNext;
@@ -84,7 +84,7 @@ namespace System.Reactive.Operators
         }
     }
 
-    internal class DoObserverObservable<T> : OperatorObservableBase<T>
+    public class DoObserverObservable<T> : OperatorObservableBase<T>
     {
         readonly IObservable<T> source;
         readonly IObserver<T> observer;
@@ -166,7 +166,7 @@ namespace System.Reactive.Operators
         }
     }
 
-    internal class DoOnErrorObservable<T> : OperatorObservableBase<T>
+    public class DoOnErrorObservable<T> : OperatorObservableBase<T>
     {
         readonly IObservable<T> source;
         readonly Action<Exception> onError;
@@ -228,7 +228,7 @@ namespace System.Reactive.Operators
         }
     }
 
-    internal class DoOnCompletedObservable<T> : OperatorObservableBase<T>
+    public class DoOnCompletedObservable<T> : OperatorObservableBase<T>
     {
         readonly IObservable<T> source;
         readonly Action onCompleted;
@@ -287,7 +287,7 @@ namespace System.Reactive.Operators
         }
     }
 
-    internal class DoOnTerminateObservable<T> : OperatorObservableBase<T>
+    public class DoOnTerminateObservable<T> : OperatorObservableBase<T>
     {
         readonly IObservable<T> source;
         readonly Action onTerminate;
@@ -355,7 +355,7 @@ namespace System.Reactive.Operators
         }
     }
 
-    internal class DoOnSubscribeObservable<T> : OperatorObservableBase<T>
+    public class DoOnSubscribeObservable<T> : OperatorObservableBase<T>
     {
         readonly IObservable<T> source;
         readonly Action onSubscribe;
@@ -414,7 +414,7 @@ namespace System.Reactive.Operators
         }
     }
 
-    internal class DoOnCancelObservable<T> : OperatorObservableBase<T>
+    public class DoOnCancelObservable<T> : OperatorObservableBase<T>
     {
         readonly IObservable<T> source;
         readonly Action onCancel;

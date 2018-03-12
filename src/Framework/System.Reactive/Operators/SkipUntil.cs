@@ -3,7 +3,7 @@ using System.Reactive.InternalUtil;
 
 namespace System.Reactive.Operators
 {
-    internal class SkipUntilObservable<T, TOther> : OperatorObservableBase<T>
+    public class SkipUntilObservable<T, TOther> : OperatorObservableBase<T>
     {
         readonly IObservable<T> source;
         readonly IObservable<TOther> other;

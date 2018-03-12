@@ -3,7 +3,7 @@ using System.Reactive.Subjects;
 
 namespace System.Reactive.Operators
 {
-    internal class RefCountObservable<T> : OperatorObservableBase<T>
+    public class RefCountObservable<T> : OperatorObservableBase<T>
     {
         readonly IConnectableObservable<T> source;
         readonly object gate = new object();

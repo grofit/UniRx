@@ -3,7 +3,7 @@ using System.Reactive.Schedulers;
 
 namespace System.Reactive.Operators
 {
-    internal class TimeoutObservable<T> : OperatorObservableBase<T>
+    public class TimeoutObservable<T> : OperatorObservableBase<T>
     {
         readonly IObservable<T> source;
         readonly TimeSpan? dueTime;

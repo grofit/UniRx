@@ -4,7 +4,7 @@ using System.Reactive.Schedulers;
 
 namespace System.Reactive.Operators
 {
-    internal class CatchObservable<T, TException> : OperatorObservableBase<T>
+    public class CatchObservable<T, TException> : OperatorObservableBase<T>
         where TException : Exception
     {
         readonly IObservable<T> source;
@@ -88,7 +88,7 @@ namespace System.Reactive.Operators
     }
 
 
-    internal class CatchObservable<T> : OperatorObservableBase<T>
+    public class CatchObservable<T> : OperatorObservableBase<T>
     {
         readonly IEnumerable<IObservable<T>> sources;
 

@@ -1,6 +1,6 @@
 ﻿namespace System.Reactive.Operators
 {
-    internal class SynchronizeObservable<T> : OperatorObservableBase<T>
+    public class SynchronizeObservable<T> : OperatorObservableBase<T>
     {
         readonly IObservable<T> source;
         readonly object gate;

@@ -1,6 +1,6 @@
 ﻿namespace System.Reactive.Operators
 {
-    internal class MaterializeObservable<T> : OperatorObservableBase<Notification<T>>
+    public class MaterializeObservable<T> : OperatorObservableBase<Notification<T>>
     {
         readonly IObservable<T> source;
 

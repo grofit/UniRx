@@ -1,6 +1,6 @@
 ﻿namespace System.Reactive.Operators
 {
-    internal class ForEachAsyncObservable<T> : OperatorObservableBase<Unit>
+    public class ForEachAsyncObservable<T> : OperatorObservableBase<Unit>
     {
         readonly IObservable<T> source;
         readonly Action<T> onNext;

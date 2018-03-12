@@ -4,7 +4,7 @@ using System.Reactive.Schedulers;
 
 namespace System.Reactive.Operators
 {
-    internal class BufferObservable<T> : OperatorObservableBase<IList<T>>
+    public class BufferObservable<T> : OperatorObservableBase<IList<T>>
     {
         readonly IObservable<T> source;
         readonly int count;

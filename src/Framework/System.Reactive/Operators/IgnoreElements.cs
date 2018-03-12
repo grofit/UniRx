@@ -1,6 +1,6 @@
 ﻿namespace System.Reactive.Operators
 {
-    internal class IgnoreElementsObservable<T> : OperatorObservableBase<T>
+    public class IgnoreElementsObservable<T> : OperatorObservableBase<T>
     {
         readonly IObservable<T> source;
 

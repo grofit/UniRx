@@ -3,7 +3,7 @@ using System.Reactive.Schedulers;
 
 namespace System.Reactive.Operators
 {
-    internal class ReturnObservable<T> : OperatorObservableBase<T>
+    public class ReturnObservable<T> : OperatorObservableBase<T>
     {
         readonly T value;
         readonly IScheduler scheduler;
@@ -69,7 +69,7 @@ namespace System.Reactive.Operators
         }
     }
 
-    internal class ImmediateReturnObservable<T> : IObservable<T>, IOptimizedObservable<T>
+    public class ImmediateReturnObservable<T> : IObservable<T>, IOptimizedObservable<T>
     {
         readonly T value;
 
@@ -91,7 +91,7 @@ namespace System.Reactive.Operators
         }
     }
 
-    internal class ImmutableReturnUnitObservable : IObservable<Unit>, IOptimizedObservable<Unit>
+    public class ImmutableReturnUnitObservable : IObservable<Unit>, IOptimizedObservable<Unit>
     {
         internal static ImmutableReturnUnitObservable Instance = new ImmutableReturnUnitObservable();
 
@@ -113,7 +113,7 @@ namespace System.Reactive.Operators
         }
     }
 
-    internal class ImmutableReturnTrueObservable : IObservable<bool>, IOptimizedObservable<bool>
+    public class ImmutableReturnTrueObservable : IObservable<bool>, IOptimizedObservable<bool>
     {
         internal static ImmutableReturnTrueObservable Instance = new ImmutableReturnTrueObservable();
 
@@ -135,7 +135,7 @@ namespace System.Reactive.Operators
         }
     }
 
-    internal class ImmutableReturnFalseObservable : IObservable<bool>, IOptimizedObservable<bool>
+    public class ImmutableReturnFalseObservable : IObservable<bool>, IOptimizedObservable<bool>
     {
         internal static ImmutableReturnFalseObservable Instance = new ImmutableReturnFalseObservable();
 
@@ -157,7 +157,7 @@ namespace System.Reactive.Operators
         }
     }
 
-    internal class ImmutableReturnInt32Observable : IObservable<int>, IOptimizedObservable<int>
+    public class ImmutableReturnInt32Observable : IObservable<int>, IOptimizedObservable<int>
     {
         static ImmutableReturnInt32Observable[] Caches = new ImmutableReturnInt32Observable[]
         {

@@ -1,6 +1,6 @@
 ﻿namespace System.Reactive.Operators
 {
-    internal class WhereObservable<T> : OperatorObservableBase<T>
+    public class WhereObservable<T> : OperatorObservableBase<T>
     {
         readonly IObservable<T> source;
         readonly Func<T, bool> predicate;

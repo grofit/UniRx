@@ -2,7 +2,7 @@
 
 namespace System.Reactive.Operators
 {
-    internal class ContinueWithObservable<TSource, TResult> : OperatorObservableBase<TResult>
+    public class ContinueWithObservable<TSource, TResult> : OperatorObservableBase<TResult>
     {
         readonly IObservable<TSource> source;
         readonly Func<TSource, IObservable<TResult>> selector;

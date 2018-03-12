@@ -4,7 +4,7 @@ namespace System.Reactive.Operators
 {
     // FromEvent, FromEventPattern
 
-    internal class FromEventPatternObservable<TDelegate, TEventArgs> : OperatorObservableBase<EventPattern<TEventArgs>>
+    public class FromEventPatternObservable<TDelegate, TEventArgs> : OperatorObservableBase<EventPattern<TEventArgs>>
         where TEventArgs : EventArgs
     {
         readonly Func<EventHandler<TEventArgs>, TDelegate> conversion;

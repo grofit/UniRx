@@ -3,7 +3,7 @@ using System.Reactive.Schedulers;
 
 namespace System.Reactive.Operators
 {
-    internal class SubscribeOnObservable<T> : OperatorObservableBase<T>
+    public class SubscribeOnObservable<T> : OperatorObservableBase<T>
     {
         readonly IObservable<T> source;
         readonly IScheduler scheduler;

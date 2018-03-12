@@ -3,7 +3,7 @@ using System.Reactive.Schedulers;
 
 namespace System.Reactive.Operators
 {
-    internal class RangeObservable : OperatorObservableBase<int>
+    public class RangeObservable : OperatorObservableBase<int>
     {
         readonly int start;
         readonly int count;

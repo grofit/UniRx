@@ -2,7 +2,7 @@
 
 namespace System.Reactive.Operators
 {
-    internal class CreateObservable<T> : OperatorObservableBase<T>
+    public class CreateObservable<T> : OperatorObservableBase<T>
     {
         readonly Func<IObserver<T>, IDisposable> subscribe;
 

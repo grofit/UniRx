@@ -1,6 +1,6 @@
 ﻿namespace System.Reactive.Operators
 {
-    internal class OfTypeObservable<TSource, TResult> : OperatorObservableBase<TResult>
+    public class OfTypeObservable<TSource, TResult> : OperatorObservableBase<TResult>
     {
         readonly IObservable<TSource> source;
 

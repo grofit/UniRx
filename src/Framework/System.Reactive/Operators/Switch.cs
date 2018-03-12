@@ -2,7 +2,7 @@
 
 namespace System.Reactive.Operators
 {
-    internal class SwitchObservable<T> : OperatorObservableBase<T>
+    public class SwitchObservable<T> : OperatorObservableBase<T>
     {
         readonly IObservable<IObservable<T>> sources;
 

@@ -3,7 +3,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Operators
 {
-    internal class SelectManyObservable<TSource, TResult> : OperatorObservableBase<TResult>
+    public class SelectManyObservable<TSource, TResult> : OperatorObservableBase<TResult>
     {
         readonly IObservable<TSource> source;
         readonly Func<TSource, IObservable<TResult>> selector;
@@ -437,7 +437,7 @@ namespace System.Reactive.Operators
     }
 
     // with resultSelector
-    internal class SelectManyObservable<TSource, TCollection, TResult> : OperatorObservableBase<TResult>
+    public class SelectManyObservable<TSource, TCollection, TResult> : OperatorObservableBase<TResult>
     {
         readonly IObservable<TSource> source;
         readonly Func<TSource, IObservable<TCollection>> collectionSelector;

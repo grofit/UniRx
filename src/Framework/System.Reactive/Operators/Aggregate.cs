@@ -1,6 +1,6 @@
 ﻿namespace System.Reactive.Operators
 {
-    internal class AggregateObservable<TSource> : OperatorObservableBase<TSource>
+    public class AggregateObservable<TSource> : OperatorObservableBase<TSource>
     {
         readonly IObservable<TSource> source;
         readonly Func<TSource, TSource, TSource> accumulator;
@@ -71,7 +71,7 @@
         }
     }
 
-    internal class AggregateObservable<TSource, TAccumulate> : OperatorObservableBase<TAccumulate>
+    public class AggregateObservable<TSource, TAccumulate> : OperatorObservableBase<TAccumulate>
     {
         readonly IObservable<TSource> source;
         readonly TAccumulate seed;
@@ -130,7 +130,7 @@
         }
     }
 
-    internal class AggregateObservable<TSource, TAccumulate, TResult> : OperatorObservableBase<TResult>
+    public class AggregateObservable<TSource, TAccumulate, TResult> : OperatorObservableBase<TResult>
     {
         readonly IObservable<TSource> source;
         readonly TAccumulate seed;

@@ -2,7 +2,7 @@
 
 namespace System.Reactive.Operators
 {
-    internal class StartWithObservable<T> : OperatorObservableBase<T>
+    public class StartWithObservable<T> : OperatorObservableBase<T>
     {
         readonly IObservable<T> source;
         readonly T value;

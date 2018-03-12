@@ -11,7 +11,7 @@ namespace System.Reactive.Operators
 
 
     // binary
-    internal class CombineLatestObservable<TLeft, TRight, TResult> : OperatorObservableBase<TResult>
+    public class CombineLatestObservable<TLeft, TRight, TResult> : OperatorObservableBase<TResult>
     {
         readonly IObservable<TLeft> left;
         readonly IObservable<TRight> right;
@@ -180,7 +180,7 @@ namespace System.Reactive.Operators
     }
 
     // array
-    internal class CombineLatestObservable<T> : OperatorObservableBase<IList<T>>
+    public class CombineLatestObservable<T> : OperatorObservableBase<IList<T>>
     {
         readonly IObservable<T>[] sources;
 
@@ -357,7 +357,7 @@ namespace System.Reactive.Operators
     // generated from UniRx.Console.CombineLatestGenerator.tt
     #region NTH
 
-    internal class CombineLatestObservable<T1, T2, T3, TR> : OperatorObservableBase<TR>
+    public class CombineLatestObservable<T1, T2, T3, TR> : OperatorObservableBase<TR>
     {
         IObservable<T1> source1;
         IObservable<T2> source2;
@@ -835,14 +835,14 @@ namespace System.Reactive.Operators
 
     // Nth infrastructure
 
-    internal interface ICombineLatestObservable
+    public interface ICombineLatestObservable
     {
         void Publish(int index);
         void Fail(Exception error);
         void Done(int index);
     }
 
-    internal abstract class NthCombineLatestObserverBase<T> : OperatorObserverBase<T, T>, ICombineLatestObservable
+    public abstract class NthCombineLatestObserverBase<T> : OperatorObserverBase<T, T>, ICombineLatestObservable
     {
         readonly int length;
         bool isAllValueStarted;
@@ -964,7 +964,7 @@ namespace System.Reactive.Operators
     }
 
     // Nth
-    internal class CombineLatestObserver<T> : IObserver<T>
+    public class CombineLatestObserver<T> : IObserver<T>
     {
         readonly object gate;
         readonly ICombineLatestObservable parent;

@@ -1,6 +1,6 @@
 ﻿namespace System.Reactive.Operators
 {
-    internal class ScanObservable<TSource> : OperatorObservableBase<TSource>
+    public class ScanObservable<TSource> : OperatorObservableBase<TSource>
     {
         readonly IObservable<TSource> source;
         readonly Func<TSource, TSource, TSource> accumulator;
@@ -67,7 +67,7 @@
         }
     }
 
-    internal class ScanObservable<TSource, TAccumulate> : OperatorObservableBase<TAccumulate>
+    public class ScanObservable<TSource, TAccumulate> : OperatorObservableBase<TAccumulate>
     {
         readonly IObservable<TSource> source;
         readonly TAccumulate seed;

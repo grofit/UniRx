@@ -2,7 +2,7 @@
 
 namespace System.Reactive.Operators
 {
-    internal class NeverObservable<T> : OperatorObservableBase<T>
+    public class NeverObservable<T> : OperatorObservableBase<T>
     {
         public NeverObservable()
             : base(false)
@@ -15,7 +15,7 @@ namespace System.Reactive.Operators
         }
     }
 
-    internal class ImmutableNeverObservable<T> : IObservable<T>, IOptimizedObservable<T>
+    public class ImmutableNeverObservable<T> : IObservable<T>, IOptimizedObservable<T>
     {
         internal static ImmutableNeverObservable<T> Instance = new ImmutableNeverObservable<T>();
 

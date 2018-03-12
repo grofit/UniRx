@@ -1,6 +1,6 @@
 ﻿namespace System.Reactive.Operators
 {
-    internal class DeferObservable<T> : OperatorObservableBase<T>
+    public class DeferObservable<T> : OperatorObservableBase<T>
     {
         readonly Func<IObservable<T>> observableFactory;
 

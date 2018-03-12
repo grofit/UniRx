@@ -5,7 +5,7 @@ using System.Reactive.Subjects;
 
 namespace System.Reactive.Operators
 {
-    internal class GroupedObservable<TKey, TElement> : IGroupedObservable<TKey, TElement>
+    public class GroupedObservable<TKey, TElement> : IGroupedObservable<TKey, TElement>
     {
         readonly TKey key;
         readonly IObservable<TElement> subject;
@@ -31,7 +31,7 @@ namespace System.Reactive.Operators
         }
     }
 
-    internal class GroupByObservable<TSource, TKey, TElement> : OperatorObservableBase<IGroupedObservable<TKey, TElement>>
+    public class GroupByObservable<TSource, TKey, TElement> : OperatorObservableBase<IGroupedObservable<TKey, TElement>>
     {
         readonly IObservable<TSource> source;
         readonly Func<TSource, TKey> keySelector;

@@ -1,6 +1,6 @@
 ﻿namespace System.Reactive.Operators
 {
-    internal class CastObservable<TSource, TResult> : OperatorObservableBase<TResult>
+    public class CastObservable<TSource, TResult> : OperatorObservableBase<TResult>
     {
         readonly IObservable<TSource> source;
 

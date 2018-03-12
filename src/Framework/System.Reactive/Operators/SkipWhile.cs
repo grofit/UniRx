@@ -1,6 +1,6 @@
 ﻿namespace System.Reactive.Operators
 {
-    internal class SkipWhileObservable<T> : OperatorObservableBase<T>
+    public class SkipWhileObservable<T> : OperatorObservableBase<T>
     {
         readonly IObservable<T> source;
         readonly Func<T, bool> predicate;

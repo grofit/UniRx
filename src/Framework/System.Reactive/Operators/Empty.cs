@@ -3,7 +3,7 @@ using System.Reactive.Schedulers;
 
 namespace System.Reactive.Operators
 {
-    internal class EmptyObservable<T> : OperatorObservableBase<T>
+    public class EmptyObservable<T> : OperatorObservableBase<T>
     {
         readonly IScheduler scheduler;
 
@@ -61,7 +61,7 @@ namespace System.Reactive.Operators
         }
     }
 
-    internal class ImmutableEmptyObservable<T> : IObservable<T>, IOptimizedObservable<T>
+    public class ImmutableEmptyObservable<T> : IObservable<T>, IOptimizedObservable<T>
     {
         internal static ImmutableEmptyObservable<T> Instance = new ImmutableEmptyObservable<T>();
 

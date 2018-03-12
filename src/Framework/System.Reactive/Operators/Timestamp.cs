@@ -2,7 +2,7 @@
 
 namespace System.Reactive.Operators
 {
-    internal class TimestampObservable<T> : OperatorObservableBase<Timestamped<T>>
+    public class TimestampObservable<T> : OperatorObservableBase<Timestamped<T>>
     {
         readonly IObservable<T> source;
         readonly IScheduler scheduler;

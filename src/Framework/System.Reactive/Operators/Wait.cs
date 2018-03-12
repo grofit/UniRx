@@ -1,6 +1,6 @@
 ﻿namespace System.Reactive.Operators
 {
-    internal class Wait<T> : IObserver<T>
+    public class Wait<T> : IObserver<T>
     {
         static readonly TimeSpan InfiniteTimeSpan = new TimeSpan(0, 0, 0, 0, -1); // from .NET 4.5
 

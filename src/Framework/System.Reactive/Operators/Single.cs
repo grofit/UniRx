@@ -1,6 +1,6 @@
 ﻿namespace System.Reactive.Operators
 {
-    internal class SingleObservable<T> : OperatorObservableBase<T>
+    public class SingleObservable<T> : OperatorObservableBase<T>
     {
         readonly IObservable<T> source;
         readonly bool useDefault;

@@ -3,7 +3,7 @@ using System.Reactive.Schedulers;
 
 namespace System.Reactive.Operators
 {
-    internal class TimerObservable : OperatorObservableBase<long>
+    public class TimerObservable : OperatorObservableBase<long>
     {
         readonly DateTimeOffset? dueTimeA;
         readonly TimeSpan? dueTimeB;

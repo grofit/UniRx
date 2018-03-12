@@ -3,7 +3,7 @@ using System.Reactive.Schedulers;
 
 namespace System.Reactive.Operators
 {
-    internal class TakeLastObservable<T> : OperatorObservableBase<T>
+    public class TakeLastObservable<T> : OperatorObservableBase<T>
     {
         readonly IObservable<T> source;
 

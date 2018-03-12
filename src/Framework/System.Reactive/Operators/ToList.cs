@@ -2,7 +2,7 @@
 
 namespace System.Reactive.Operators
 {
-    internal class ToListObservable<TSource> : OperatorObservableBase<IList<TSource>>
+    public class ToListObservable<TSource> : OperatorObservableBase<IList<TSource>>
     {
         readonly IObservable<TSource> source;
 

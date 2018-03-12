@@ -1,6 +1,6 @@
 ﻿namespace System.Reactive.Operators
 {
-    internal class TakeWhileObservable<T> : OperatorObservableBase<T>
+    public class TakeWhileObservable<T> : OperatorObservableBase<T>
     {
         readonly IObservable<T> source;
         readonly Func<T, bool> predicate;

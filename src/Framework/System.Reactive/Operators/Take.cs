@@ -3,7 +3,7 @@ using System.Reactive.Schedulers;
 
 namespace System.Reactive.Operators
 {
-    internal class TakeObservable<T> : OperatorObservableBase<T>
+    public class TakeObservable<T> : OperatorObservableBase<T>
     {
         readonly IObservable<T> source;
         readonly int count;

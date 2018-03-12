@@ -4,7 +4,7 @@ using System.Reactive.Schedulers;
 
 namespace System.Reactive.Operators
 {
-    internal class ObserveOnObservable<T> : OperatorObservableBase<T>
+    public class ObserveOnObservable<T> : OperatorObservableBase<T>
     {
         readonly IObservable<T> source;
         readonly IScheduler scheduler;

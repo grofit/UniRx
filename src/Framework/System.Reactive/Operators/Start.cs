@@ -2,7 +2,7 @@
 
 namespace System.Reactive.Operators
 {
-    internal class StartObservable<T> : OperatorObservableBase<T>
+    public class StartObservable<T> : OperatorObservableBase<T>
     {
         readonly Action action;
         readonly Func<T> function;

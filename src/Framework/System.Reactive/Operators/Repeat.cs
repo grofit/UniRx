@@ -3,7 +3,7 @@ using System.Reactive.Schedulers;
 
 namespace System.Reactive.Operators
 {
-    internal class RepeatObservable<T> : OperatorObservableBase<T>
+    public class RepeatObservable<T> : OperatorObservableBase<T>
     {
         readonly T value;
         readonly int? repeatCount;

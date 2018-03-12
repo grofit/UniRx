@@ -4,7 +4,7 @@ using System.Reactive.Schedulers;
 
 namespace System.Reactive.Operators
 {
-    internal class DelayObservable<T> : OperatorObservableBase<T>
+    public class DelayObservable<T> : OperatorObservableBase<T>
     {
         readonly IObservable<T> source;
         readonly TimeSpan dueTime;

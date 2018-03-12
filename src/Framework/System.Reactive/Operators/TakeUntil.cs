@@ -2,7 +2,7 @@
 
 namespace System.Reactive.Operators
 {
-    internal class TakeUntilObservable<T, TOther> : OperatorObservableBase<T>
+    public class TakeUntilObservable<T, TOther> : OperatorObservableBase<T>
     {
         readonly IObservable<T> source;
         readonly IObservable<TOther> other;

@@ -2,7 +2,7 @@
 {
     // Optimize for .Select().Where()
 
-    internal class SelectWhereObservable<T, TR> : OperatorObservableBase<TR>
+    public class SelectWhereObservable<T, TR> : OperatorObservableBase<TR>
     {
         readonly IObservable<T> source;
         readonly Func<T, TR> selector;

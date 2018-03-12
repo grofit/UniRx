@@ -1,6 +1,6 @@
 ﻿namespace System.Reactive.Operators
 {
-    internal class PairwiseObservable<T, TR> : OperatorObservableBase<TR>
+    public class PairwiseObservable<T, TR> : OperatorObservableBase<TR>
     {
         readonly IObservable<T> source;
         readonly Func<T, T, TR> selector;
@@ -65,7 +65,7 @@
         }
     }
 
-    internal class PairwiseObservable<T> : OperatorObservableBase<Pair<T>>
+    public class PairwiseObservable<T> : OperatorObservableBase<Pair<T>>
     {
         readonly IObservable<T> source;
 

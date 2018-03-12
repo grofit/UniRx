@@ -3,7 +3,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Operators
 {
-    internal class WhenAllObservable<T> : OperatorObservableBase<T[]>
+    public class WhenAllObservable<T> : OperatorObservableBase<T[]>
     {
         readonly IObservable<T>[] sources;
         readonly IEnumerable<IObservable<T>> sourcesEnumerable;
@@ -254,7 +254,7 @@ namespace System.Reactive.Operators
         }
     }
 
-    internal class WhenAllObservable : OperatorObservableBase<Unit>
+    public class WhenAllObservable : OperatorObservableBase<Unit>
     {
         readonly IObservable<Unit>[] sources;
         readonly IEnumerable<IObservable<Unit>> sourcesEnumerable;

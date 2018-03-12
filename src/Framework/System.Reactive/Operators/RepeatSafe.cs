@@ -4,7 +4,7 @@ using System.Reactive.Schedulers;
 
 namespace System.Reactive.Operators
 {
-    internal class RepeatSafeObservable<T> : OperatorObservableBase<T>
+    public class RepeatSafeObservable<T> : OperatorObservableBase<T>
     {
         readonly IEnumerable<IObservable<T>> sources;
 

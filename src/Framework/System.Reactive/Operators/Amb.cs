@@ -3,7 +3,7 @@ using System.Reactive.InternalUtil;
 
 namespace System.Reactive.Operators
 {
-    internal class AmbObservable<T> : OperatorObservableBase<T>
+    public class AmbObservable<T> : OperatorObservableBase<T>
     {
         readonly IObservable<T> source;
         readonly IObservable<T> second;

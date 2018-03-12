@@ -10,7 +10,7 @@ namespace System.Reactive.Operators
     public delegate TR ZipLatestFunc<T1, T2, T3, T4, T5, T6, T7, TR>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7);
 
     // binary
-    internal class ZipLatestObservable<TLeft, TRight, TResult> : OperatorObservableBase<TResult>
+    public class ZipLatestObservable<TLeft, TRight, TResult> : OperatorObservableBase<TResult>
     {
         readonly IObservable<TLeft> left;
         readonly IObservable<TRight> right;
@@ -188,7 +188,7 @@ namespace System.Reactive.Operators
     }
 
     // array
-    internal class ZipLatestObservable<T> : OperatorObservableBase<IList<T>>
+    public class ZipLatestObservable<T> : OperatorObservableBase<IList<T>>
     {
         readonly IObservable<T>[] sources;
 
@@ -357,7 +357,7 @@ namespace System.Reactive.Operators
     // generated from UniRx.Console.ZipLatestGenerator.tt
     #region NTH
 
-    internal class ZipLatestObservable<T1, T2, T3, TR> : OperatorObservableBase<TR>
+    public class ZipLatestObservable<T1, T2, T3, TR> : OperatorObservableBase<TR>
     {
         IObservable<T1> source1;
         IObservable<T2> source2;
@@ -835,14 +835,14 @@ namespace System.Reactive.Operators
 
     // Nth infrastructure
 
-    internal interface IZipLatestObservable
+    public interface IZipLatestObservable
     {
         void Publish(int index);
         void Fail(Exception error);
         void Done(int index);
     }
 
-    internal abstract class NthZipLatestObserverBase<T> : OperatorObserverBase<T, T>, IZipLatestObservable
+    public abstract class NthZipLatestObserverBase<T> : OperatorObserverBase<T, T>, IZipLatestObservable
     {
         readonly int length;
         readonly bool[] isStarted;

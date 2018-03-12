@@ -2,7 +2,7 @@
 
 namespace System.Reactive.Operators
 {
-    internal class ToArrayObservable<TSource> : OperatorObservableBase<TSource[]>
+    public class ToArrayObservable<TSource> : OperatorObservableBase<TSource[]>
     {
         readonly IObservable<TSource> source;
 
