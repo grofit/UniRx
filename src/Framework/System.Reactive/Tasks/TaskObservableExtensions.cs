@@ -1,8 +1,11 @@
 ﻿// this code is borrowed from RxOfficial(rx.codeplex.com) and modified
 
-#if (NET_4_6)
-
 using System;
+using System.Reactive;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Reactive.Schedulers;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using System.Threading;
 
@@ -364,4 +367,3 @@ namespace UniRx
         }
     }
 }
-#endif

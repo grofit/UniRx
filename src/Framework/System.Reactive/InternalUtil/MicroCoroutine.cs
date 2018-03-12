@@ -72,14 +72,6 @@ namespace System.Reactive.InternalUtil
                             }
                             else
                             {
-#if UNITY_EDITOR
-                                // validation only on Editor.
-                                if (coroutine.Current != null)
-                                {
-                                    UnityEngine.Debug.LogWarning("MicroCoroutine supports only yield return null. return value = " + coroutine.Current);
-                                }
-#endif
-
                                 continue; // next i 
                             }
                         }
@@ -110,14 +102,6 @@ namespace System.Reactive.InternalUtil
                                 }
                                 else
                                 {
-#if UNITY_EDITOR
-                                    // validation only on Editor.
-                                    if (fromTail.Current != null)
-                                    {
-                                        UnityEngine.Debug.LogWarning("MicroCoroutine supports only yield return null. return value = " + coroutine.Current);
-                                    }
-#endif
-
                                     // swap
                                     coroutines[i] = fromTail;
                                     coroutines[j] = null;

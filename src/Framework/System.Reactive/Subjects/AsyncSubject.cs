@@ -1,17 +1,11 @@
 ﻿using System.Reactive.Disposables;
 using System.Reactive.InternalUtil;
-
-#if (NET_4_6)
 using System.Runtime.CompilerServices;
 using System.Threading;
-#endif
 
 namespace System.Reactive.Subjects
 {
-    public sealed class AsyncSubject<T> : ISubject<T>, IOptimizedObservable<T>, IDisposable
-#if (NET_4_6)
-        , INotifyCompletion
-#endif
+    public sealed class AsyncSubject<T> : ISubject<T>, IOptimizedObservable<T>, IDisposable, INotifyCompletion
     {
         object observerLock = new object();
 
@@ -216,10 +210,7 @@ namespace System.Reactive.Subjects
                 }
             }
         }
-
-
-#if (NET_4_6)
-
+        
         /// <summary>
         /// Gets an awaitable object for the current AsyncSubject.
         /// </summary>
@@ -322,6 +313,5 @@ namespace System.Reactive.Subjects
 
             return lastValue;
         }
-#endif
     }
 }

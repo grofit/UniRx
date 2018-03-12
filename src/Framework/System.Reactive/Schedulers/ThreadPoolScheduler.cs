@@ -6,7 +6,7 @@ using System.Reactive.InternalUtil;
 
 namespace System.Reactive.Schedulers
 {
-    public static partial class Scheduler
+    public partial class Scheduler
     {
         public static readonly IScheduler ThreadPool = new ThreadPoolScheduler();
 

@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace System.Reactive.Schedulers
 {
-    public static partial class Scheduler
+    public partial class Scheduler
     {
         public static readonly IScheduler Immediate = new ImmediateScheduler();
 
