@@ -4,7 +4,7 @@ using System.Reactive.Schedulers;
 
 namespace System.Reactive.Linq
 {
-    public static partial class Observable
+    public static class ObservablePagingExtensions
     {
         public static IObservable<T> Take<T>(this IObservable<T> source, int count)
         {

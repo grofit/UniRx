@@ -131,7 +131,7 @@ namespace System.Reactive.Notifiers
                 }
                 else
                 {
-                    return System.Reactive.Linq.Observable.ReturnUnit();
+                    return Observable.ReturnUnit();
                 }
             }
 
@@ -141,7 +141,7 @@ namespace System.Reactive.Notifiers
             {
                 awaiter[i] = data[i].Invoke(message);
             }
-            return System.Reactive.Linq.Observable.WhenAll(awaiter);
+            return Observable.WhenAll(awaiter);
         }
 
         public IDisposable Subscribe<T>(Func<T, IObservable<Unit>> asyncMessageReceiver)

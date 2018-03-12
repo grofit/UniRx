@@ -2,7 +2,7 @@
 
 namespace System.Reactive.Linq
 {
-    public static partial class Observable
+    public partial class Observable
     {
         public static IObservable<T> AddRef<T>(IObservable<T> xs, RefCountDisposable r)
         {

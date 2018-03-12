@@ -2,7 +2,7 @@
 
 namespace System.Reactive.Linq
 {
-    public static partial class Observable
+    public static class ObservableAggregateExtensions
     {
         public static IObservable<TSource> Scan<TSource>(this IObservable<TSource> source, Func<TSource, TSource, TSource> accumulator)
         {

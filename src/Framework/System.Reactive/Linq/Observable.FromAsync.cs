@@ -3,7 +3,7 @@ using System.Reactive.Subjects;
 
 namespace System.Reactive.Linq
 {
-    public static partial class Observable
+    public partial class Observable
     {
         public static Func<IObservable<TResult>> FromAsyncPattern<TResult>(Func<AsyncCallback, object, IAsyncResult> begin, Func<IAsyncResult, TResult> end)
         {
@@ -30,7 +30,7 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception exception)
                 {
-                    return System.Reactive.Linq.Observable.Throw<TResult>(exception, Scheduler.DefaultSchedulers.AsyncConversions);
+                    return Throw<TResult>(exception, Scheduler.DefaultSchedulers.AsyncConversions);
                 }
                 return subject.AsObservable();
             };
@@ -61,7 +61,7 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception exception)
                 {
-                    return System.Reactive.Linq.Observable.Throw<TResult>(exception, Scheduler.DefaultSchedulers.AsyncConversions);
+                    return Throw<TResult>(exception, Scheduler.DefaultSchedulers.AsyncConversions);
                 }
                 return subject.AsObservable();
             };
@@ -92,7 +92,7 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception exception)
                 {
-                    return System.Reactive.Linq.Observable.Throw<TResult>(exception, Scheduler.DefaultSchedulers.AsyncConversions);
+                    return Throw<TResult>(exception, Scheduler.DefaultSchedulers.AsyncConversions);
                 }
                 return subject.AsObservable();
             };

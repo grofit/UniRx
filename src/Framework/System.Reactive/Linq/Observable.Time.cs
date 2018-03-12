@@ -3,7 +3,7 @@ using System.Reactive.Schedulers;
 
 namespace System.Reactive.Linq
 {
-    public static partial class Observable
+    public partial class Observable
     {
         public static IObservable<long> Interval(TimeSpan period)
         {

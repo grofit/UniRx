@@ -5,7 +5,7 @@ using System.Reactive.Subjects;
 
 namespace System.Reactive.Linq
 {
-    public static partial class Observable
+    public partial class Observable
     {
         /// <summary>
         /// Create anonymous observable. Observer has exception durability. This is recommended for make operator and event like generator. 

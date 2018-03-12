@@ -2,7 +2,7 @@
 
 namespace System.Reactive.Linq
 {
-    public static partial class Observable
+    public static class ObservableRepeatExtensions
     {
         /// <summary>
         /// Same as Repeat() but if arriving contiguous "OnComplete" Repeat stops.

@@ -660,6 +660,7 @@ namespace System.Reactive.Tests
 
             var list = new List<int>();
             var complete = false;
+
             Observable.Merge(new[] { s1, s2, s3 }, maxConcurrent: 2).Subscribe(list.Add, () => complete = true);
 
             s1.OnNext(10);

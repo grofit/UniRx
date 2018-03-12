@@ -3,7 +3,7 @@ using System.Reactive.Operators;
 
 namespace System.Reactive.Linq
 {
-    public static partial class Observable
+    public static class ObservableLinqExtensions
     {
         public static IObservable<TR> Select<T, TR>(this IObservable<T> source, Func<T, TR> selector)
         {

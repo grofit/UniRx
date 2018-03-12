@@ -4,7 +4,7 @@ using System.Reactive.Subjects;
 
 namespace System.Reactive.Linq
 {
-    public static partial class Observable
+    public static class ObservableBindingExtensions
     {
         public static IConnectableObservable<T> Multicast<T>(this IObservable<T> source, ISubject<T> subject)
         {

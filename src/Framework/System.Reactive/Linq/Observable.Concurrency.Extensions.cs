@@ -4,7 +4,7 @@ using System.Reactive.Schedulers;
 
 namespace System.Reactive.Linq
 {
-    public static partial class Observable
+    public static class ObservableConcurrencyExtensions
     {
         public static IObservable<T> Synchronize<T>(this IObservable<T> source)
         {

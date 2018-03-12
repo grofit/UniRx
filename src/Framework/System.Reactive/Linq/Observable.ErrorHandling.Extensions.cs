@@ -4,7 +4,7 @@ using System.Reactive.Schedulers;
 
 namespace System.Reactive.Linq
 {
-    public static partial class Observable
+    public static class ObservableErrorHandlingExtensions
     {
         /// <summary>
         /// <para>Repeats the source observable sequence until it successfully terminates.</para>

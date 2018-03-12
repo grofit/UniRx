@@ -1,12 +1,5 @@
-﻿#if !(UNITY_4_0 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3 || UNITY_4_4 || UNITY_4_5 || UNITY_4_6 || UNITY_5_0 || UNITY_5_1 || UNITY_5_2)
-#define SupportCustomYieldInstruction
-#endif
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Reactive.Linq;
-using System.Reactive.Unity.Operators;
-using System.Reactive.Unity.Triggers;
 using System.Threading;
 using UnityEngine;
 
@@ -27,11 +20,8 @@ namespace System.Reactive.Unity
         EndOfFrame,
         GameObjectUpdate,
         LateUpdate,
-#if SupportCustomYieldInstruction
-        /// <summary>[Obsolete]Same as Update</summary>
         [Obsolete]
         AfterUpdate
-#endif
     }
 
     public static class FrameCountTypeExtensions

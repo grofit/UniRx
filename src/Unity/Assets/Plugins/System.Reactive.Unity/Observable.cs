@@ -12,7 +12,7 @@ using CoreObservable = System.Reactive.Linq.Observable;
 
 namespace System.Reactive.Unity.Linq
 {
-    public static partial class Observable
+    public partial class Observable : System.Reactive.Linq.Observable
     {
         readonly static HashSet<Type> YieldInstructionTypes = new HashSet<Type>
         {
@@ -23,9 +23,7 @@ namespace System.Reactive.Unity.Linq
             typeof(AsyncOperation),
             typeof(Coroutine)
         };
-
-#if SupportCustomYieldInstruction
-
+        
         class EveryAfterUpdateInvoker : IEnumerator
         {
             long count = -1;
@@ -71,10 +69,7 @@ namespace System.Reactive.Unity.Linq
                 throw new NotSupportedException();
             }
         }
-
-#endif
-
-
+        
 
         /// <summary>From has no callback coroutine to IObservable. If publishEveryYield = true then publish OnNext every yield return else return once on enumeration completed.</summary>
         public static IObservable<Unit> FromCoroutine(Func<IEnumerator> coroutine, bool publishEveryYield = false)
@@ -153,7 +148,6 @@ namespace System.Reactive.Unity.Linq
                 }
                 if (hasNext)
                 {
-#if SupportCustomYieldInstruction
                     var current = enumerator.Current;
                     var customHandler = current as ICustomYieldInstructionErrorHandler;
                     if (customHandler != null && customHandler.IsReThrowOnError)
@@ -187,9 +181,6 @@ namespace System.Reactive.Unity.Linq
                     {
                         yield return enumerator.Current; // yield inner YieldInstruction
                     }
-#else
-                    yield return enumerator.Current; // yield inner YieldInstruction
-#endif
                 }
             } while (hasNext && !cancellationToken.IsCancellationRequested);
 
@@ -259,7 +250,6 @@ namespace System.Reactive.Unity.Linq
                     {
                         yield return current;
                     }
-#if SupportCustomYieldInstruction
                     else if (current is IEnumerator)
                     {
                         var customHandler = current as ICustomYieldInstructionErrorHandler;
@@ -295,7 +285,7 @@ namespace System.Reactive.Unity.Linq
                             yield return current;
                         }
                     }
-#endif
+
                     else if (current == null && nullAsNextUpdate)
                     {
                         yield return null;
@@ -417,9 +407,7 @@ namespace System.Reactive.Unity.Linq
         {
             return FromCoroutine<Unit>((observer, cancellationToken) => WrapEnumerator(coroutine, observer, cancellationToken, publishEveryYield));
         }
-
-#if SupportCustomYieldInstruction
-
+        
         public static ObservableYieldInstruction<Unit> ToYieldInstruction(this IEnumerator coroutine)
         {
             return ToObservable(coroutine, false).ToYieldInstruction();
@@ -439,8 +427,6 @@ namespace System.Reactive.Unity.Linq
         {
             return ToObservable(coroutine, false).ToYieldInstruction(throwOnError, cancellationToken);
         }
-
-#endif
 
         // variation of FromCoroutine
 
@@ -490,9 +476,7 @@ namespace System.Reactive.Unity.Linq
         {
             return MainThreadDispatcher.LateUpdateAsObservable().Scan(-1L, (x, y) => x + 1);
         }
-
-#if SupportCustomYieldInstruction
-
+        
         /// <summary>
         /// [Obsolete]Same as EveryUpdate.
         /// </summary>
@@ -501,8 +485,6 @@ namespace System.Reactive.Unity.Linq
         {
             return FromCoroutine<long>((observer, cancellationToken) => new EveryAfterUpdateInvoker(observer, cancellationToken));
         }
-
-#endif
 
         #region Observable.Time Frame Extensions
 
@@ -635,8 +617,6 @@ namespace System.Reactive.Unity.Linq
 
         #endregion
 
-#if SupportCustomYieldInstruction
-
         /// <summary>
         /// Convert to yieldable IEnumerator. e.g. yield return source.ToYieldInstruction();.
         /// If needs last result, you can take ObservableYieldInstruction.HasResult/Result property.
@@ -676,9 +656,7 @@ namespace System.Reactive.Unity.Linq
         {
             return new ObservableYieldInstruction<T>(source, throwOnError, cancel);
         }
-
-#endif
-
+        
         /// <summary>Convert to awaitable IEnumerator.</summary>
         public static IEnumerator ToAwaitableEnumerator<T>(this IObservable<T> source, CancellationToken cancel = default(CancellationToken))
         {
@@ -769,12 +747,12 @@ namespace System.Reactive.Unity.Linq
                     return source.SelectMany(_ => MainThreadDispatcher.UpdateAsObservable().Take(1), (x, _) => x);
                 case MainThreadDispatchType.LateUpdate:
                     return source.SelectMany(_ => MainThreadDispatcher.LateUpdateAsObservable().Take(1), (x, _) => x);
-#if SupportCustomYieldInstruction
+
 #pragma warning disable 612 // Type or member is obsolete
                 case MainThreadDispatchType.AfterUpdate:
                     return source.SelectMany(_ => EveryAfterUpdate().Take(1), (x, _) => x);
 #pragma warning restore 612 // Type or member is obsolete
-#endif
+
                 default:
                     throw new ArgumentException("type is invalid");
             }

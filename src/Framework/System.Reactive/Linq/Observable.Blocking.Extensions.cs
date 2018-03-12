@@ -2,7 +2,7 @@
 
 namespace System.Reactive.Linq
 {
-    public static partial class Observable
+    public static class ObservableBlockingExtensions
     {
         public static T Wait<T>(this IObservable<T> source)
         {

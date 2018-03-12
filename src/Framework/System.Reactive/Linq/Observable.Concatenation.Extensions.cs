@@ -5,7 +5,7 @@ using System.Reactive.Schedulers;
 
 namespace System.Reactive.Linq
 {
-    public static partial class Observable
+    public static class ObservableConcatenationExtensions
     {
         public static IObservable<TSource> Concat<TSource>(this IEnumerable<IObservable<TSource>> sources)
         {
@@ -80,7 +80,7 @@ namespace System.Reactive.Linq
 
         public static IObservable<IList<T>> Zip<T>(this IEnumerable<IObservable<T>> sources)
         {
-            return Zip(sources.ToArray());
+            return Observable.Zip(sources.ToArray());
         }
 
         public static IObservable<TR> Zip<T1, T2, T3, TR>(this IObservable<T1> source1, IObservable<T2> source2, IObservable<T3> source3, ZipFunc<T1, T2, T3, TR> resultSelector)
@@ -204,9 +204,7 @@ namespace System.Reactive.Linq
         /// </summary>
         public static IObservable<Unit> WhenAll(this IEnumerable<IObservable<Unit>> sources)
         {
-            var array = sources as IObservable<Unit>[];
-            if (array != null) return WhenAll(array);
-
+            if (sources is IObservable<Unit>[] array) return WhenAll(array);
             return new WhenAllObservable(sources);
         }
 
@@ -250,6 +248,5 @@ namespace System.Reactive.Linq
         {
             return values.ToObservable(scheduler).Concat(source);
         }
-
     }
 }

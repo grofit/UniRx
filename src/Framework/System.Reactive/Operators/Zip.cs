@@ -193,7 +193,7 @@ namespace System.Reactive.Operators
     {
         readonly IObservable<T>[] sources;
 
-        public ZipObservable(IObservable<T>[] sources)
+        public ZipObservable(params IObservable<T>[] sources)
             : base(true)
         {
             this.sources = sources;

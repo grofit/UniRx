@@ -4,7 +4,7 @@ using System.Reactive.Schedulers;
 
 namespace System.Reactive.Linq
 {
-    public static partial class Observable
+    public static class ObservableConversionExtensions
     {
         public static IObservable<T> AsObservable<T>(this IObservable<T> source)
         {

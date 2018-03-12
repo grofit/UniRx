@@ -4,7 +4,7 @@ using System.Threading;
 
 namespace System.Reactive.Linq
 {
-    public static partial class Observable
+    public partial class Observable
     {
         public static AsyncSubject<TSource> RunAsync<TSource>(IObservable<TSource> source, CancellationToken cancellationToken)
         {

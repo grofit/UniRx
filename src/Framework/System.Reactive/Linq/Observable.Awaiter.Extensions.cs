@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace System.Reactive.Linq
 {
-    public static partial class Observable
+    public static class ObservableAwaiterExtensions
     {
         /// <summary>
         /// Gets an awaiter that returns the last value of the observable sequence or throws an exception if the sequence is empty.

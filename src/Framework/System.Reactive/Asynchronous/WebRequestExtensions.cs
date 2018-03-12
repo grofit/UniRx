@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Net;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Threading;
 
 namespace System.Reactive.Asynchronous
@@ -9,10 +10,10 @@ namespace System.Reactive.Asynchronous
     {
         static IObservable<TResult> AbortableDeferredAsyncRequest<TResult>(Func<AsyncCallback, object, IAsyncResult> begin, Func<IAsyncResult, TResult> end, WebRequest request)
         {
-            var result = System.Reactive.Linq.Observable.Create<TResult>(observer =>
+            var result = Observable.Create<TResult>(observer =>
             {
                 var isCompleted = -1;
-                var subscription = System.Reactive.Linq.Observable.FromAsyncPattern<TResult>(begin,
+                var subscription = Observable.FromAsyncPattern<TResult>(begin,
                     ar =>
                     {
                         try

@@ -3,7 +3,7 @@ using System.Reactive.Schedulers;
 
 namespace System.Reactive.Linq
 {
-    public static partial class Observable
+    public static class ObservableTimeExtensions
     {
         public static IObservable<Timestamped<TSource>> Timestamp<TSource>(this IObservable<TSource> source)
         {
