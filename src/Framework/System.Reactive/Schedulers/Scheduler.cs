@@ -1,24 +1,18 @@
-﻿using System.Reactive.Disposables;
-
-namespace System.Reactive.Schedulers
+﻿namespace System.Reactive.Schedulers
 {
     // Scheduler Extension
     public partial class Scheduler
     {
+        private Scheduler() { }
+
         // configurable defaults
         public static class DefaultSchedulers
         {
             static IScheduler constantTime;
             public static IScheduler ConstantTimeOperations
             {
-                get
-                {
-                    return constantTime ?? (constantTime = Scheduler.Immediate);
-                }
-                set
-                {
-                    constantTime = value;
-                }
+                get => constantTime ?? (constantTime = Scheduler.Immediate);
+                set => constantTime = value;
             }
 
             static IScheduler tailRecursion;
@@ -37,30 +31,15 @@ namespace System.Reactive.Schedulers
             static IScheduler iteration;
             public static IScheduler Iteration
             {
-                get
-                {
-                    return iteration ?? (iteration = Scheduler.CurrentThread);
-                }
-                set
-                {
-                    iteration = value;
-                }
+                get => iteration ?? (iteration = Scheduler.CurrentThread);
+                set => iteration = value;
             }
 
             static IScheduler timeBasedOperations;
             public static IScheduler TimeBasedOperations
             {
-                get
-                {
-                    return timeBasedOperations ?? (timeBasedOperations = Scheduler.ThreadPool);
-
-                    // TODO: TAKE THIS FOR UNITY SPECIFIC
-                    //return timeBasedOperations ?? (timeBasedOperations = Scheduler.MainThread); // MainThread as default for TimeBased Operation
-                }
-                set
-                {
-                    timeBasedOperations = value;
-                }
+                get => timeBasedOperations ?? (timeBasedOperations = Scheduler.ThreadPool);
+                set => timeBasedOperations = value;
             }
 
             static IScheduler asyncConversions;

@@ -1,9 +1,11 @@
 ﻿#pragma warning disable 0067
 
 using System;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
 using System.Reactive.Unity;
+using System.Reactive.Unity.Linq;
 using UnityEngine;
 
 namespace UniRx.Examples

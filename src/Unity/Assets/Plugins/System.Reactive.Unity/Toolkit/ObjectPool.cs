@@ -1,9 +1,9 @@
-﻿#if UNITY_5_3_OR_NEWER
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Reactive.Unity.Linq;
+using System.Reactive.Linq;
 using System.Threading;
+using Observable = System.Reactive.Unity.Linq.Observable;
 
 namespace System.Reactive.Unity.Toolkit
 {
@@ -423,7 +423,7 @@ namespace System.Reactive.Unity.Toolkit
                 for (int i = 0; i < createCount; i++)
                 {
                     var instanceFuture = CreateInstanceAsync();
-                    loaders[i] = instanceFuture.ForEachAsync(x => Return(x));
+                    loaders[i] = instanceFuture.ForEachAsync(Return);
                 }
 
                 var awaiter = Observable.WhenAll(loaders).ToYieldInstruction(false, cancellationToken);
@@ -470,5 +470,3 @@ namespace System.Reactive.Unity.Toolkit
         #endregion
     }
 }
-
-#endif

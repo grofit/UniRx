@@ -1,14 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Reactive.Linq;
-using System.Reactive.Unity;
 using System.Reactive.Unity.Operators;
-using System.Reactive.Unity.Triggers;
 using System.Threading;
 using UnityEngine;
 using System.Reactive.Operators;
-using System.Reactive.Schedulers;
-using CoreObservable = System.Reactive.Linq.Observable;
+using System.Reactive.Unity.Schedulers;
 
 namespace System.Reactive.Unity.Linq
 {
@@ -384,50 +381,7 @@ namespace System.Reactive.Unity.Linq
         {
             return new FromMicroCoroutineObservable<T>(coroutine, frameCountType);
         }
-
-        public static IObservable<Unit> SelectMany<T>(this IObservable<T> source, IEnumerator coroutine, bool publishEveryYield = false)
-        {
-            return source.SelectMany(FromCoroutine(() => coroutine, publishEveryYield));
-        }
-
-        public static IObservable<Unit> SelectMany<T>(this IObservable<T> source, Func<IEnumerator> selector, bool publishEveryYield = false)
-        {
-            return source.SelectMany(FromCoroutine(() => selector(), publishEveryYield));
-        }
-
-        /// <summary>
-        /// Note: publishEveryYield is always false. If you want to set true, use Observable.FromCoroutine(() => selector(x), true). This is workaround of Unity compiler's bug.
-        /// </summary>
-        public static IObservable<Unit> SelectMany<T>(this IObservable<T> source, Func<T, IEnumerator> selector)
-        {
-            return source.SelectMany(x => FromCoroutine(() => selector(x), false));
-        }
-
-        public static IObservable<Unit> ToObservable(this IEnumerator coroutine, bool publishEveryYield = false)
-        {
-            return FromCoroutine<Unit>((observer, cancellationToken) => WrapEnumerator(coroutine, observer, cancellationToken, publishEveryYield));
-        }
         
-        public static ObservableYieldInstruction<Unit> ToYieldInstruction(this IEnumerator coroutine)
-        {
-            return ToObservable(coroutine, false).ToYieldInstruction();
-        }
-
-        public static ObservableYieldInstruction<Unit> ToYieldInstruction(this IEnumerator coroutine, bool throwOnError)
-        {
-            return ToObservable(coroutine, false).ToYieldInstruction(throwOnError);
-        }
-
-        public static ObservableYieldInstruction<Unit> ToYieldInstruction(this IEnumerator coroutine, CancellationToken cancellationToken)
-        {
-            return ToObservable(coroutine, false).ToYieldInstruction(cancellationToken);
-        }
-
-        public static ObservableYieldInstruction<Unit> ToYieldInstruction(this IEnumerator coroutine, bool throwOnError, CancellationToken cancellationToken)
-        {
-            return ToObservable(coroutine, false).ToYieldInstruction(throwOnError, cancellationToken);
-        }
-
         // variation of FromCoroutine
 
         /// <summary>
@@ -492,7 +446,7 @@ namespace System.Reactive.Unity.Linq
 
         public static IObservable<Unit> NextFrame(FrameCountType frameCountType = FrameCountType.Update)
         {
-            return FromMicroCoroutine<Unit>((observer, cancellation) => NextFrameCore(observer, cancellation), frameCountType);
+            return FromMicroCoroutine<Unit>(NextFrameCore, frameCountType);
         }
 
         static IEnumerator NextFrameCore(IObserver<Unit> observer, CancellationToken cancellation)
@@ -574,42 +528,42 @@ namespace System.Reactive.Unity.Linq
             }
         }
 
-        public static IObservable<T> DelayFrame<T>(this IObservable<T> source, int frameCount, FrameCountType frameCountType = FrameCountType.Update)
+        public static IObservable<T> DelayFrame<T>(IObservable<T> source, int frameCount, FrameCountType frameCountType = FrameCountType.Update)
         {
             if (frameCount < 0) throw new ArgumentOutOfRangeException("frameCount");
             return new DelayFrameObservable<T>(source, frameCount, frameCountType);
         }
 
-        public static IObservable<T> Sample<T, T2>(this IObservable<T> source, IObservable<T2> sampler)
+        public static IObservable<T> Sample<T, T2>(IObservable<T> source, IObservable<T2> sampler)
         {
             return new SampleObservable<T, T2>(source, sampler);
         }
 
-        public static IObservable<T> SampleFrame<T>(this IObservable<T> source, int frameCount, FrameCountType frameCountType = FrameCountType.Update)
+        public static IObservable<T> SampleFrame<T>(IObservable<T> source, int frameCount, FrameCountType frameCountType = FrameCountType.Update)
         {
             if (frameCount < 0) throw new ArgumentOutOfRangeException("frameCount");
             return new SampleFrameObservable<T>(source, frameCount, frameCountType);
         }
 
-        public static IObservable<TSource> ThrottleFrame<TSource>(this IObservable<TSource> source, int frameCount, FrameCountType frameCountType = FrameCountType.Update)
+        public static IObservable<TSource> ThrottleFrame<TSource>(IObservable<TSource> source, int frameCount, FrameCountType frameCountType = FrameCountType.Update)
         {
             if (frameCount < 0) throw new ArgumentOutOfRangeException("frameCount");
             return new ThrottleFrameObservable<TSource>(source, frameCount, frameCountType);
         }
 
-        public static IObservable<TSource> ThrottleFirstFrame<TSource>(this IObservable<TSource> source, int frameCount, FrameCountType frameCountType = FrameCountType.Update)
+        public static IObservable<TSource> ThrottleFirstFrame<TSource>(IObservable<TSource> source, int frameCount, FrameCountType frameCountType = FrameCountType.Update)
         {
             if (frameCount < 0) throw new ArgumentOutOfRangeException("frameCount");
             return new ThrottleFirstFrameObservable<TSource>(source, frameCount, frameCountType);
         }
 
-        public static IObservable<T> TimeoutFrame<T>(this IObservable<T> source, int frameCount, FrameCountType frameCountType = FrameCountType.Update)
+        public static IObservable<T> TimeoutFrame<T>(IObservable<T> source, int frameCount, FrameCountType frameCountType = FrameCountType.Update)
         {
             if (frameCount < 0) throw new ArgumentOutOfRangeException("frameCount");
             return new TimeoutFrameObservable<T>(source, frameCount, frameCountType);
         }
 
-        public static IObservable<T> DelayFrameSubscription<T>(this IObservable<T> source, int frameCount, FrameCountType frameCountType = FrameCountType.Update)
+        public static IObservable<T> DelayFrameSubscription<T>(IObservable<T> source, int frameCount, FrameCountType frameCountType = FrameCountType.Update)
         {
             if (frameCount < 0) throw new ArgumentOutOfRangeException("frameCount");
             return new DelayFrameSubscriptionObservable<T>(source, frameCount, frameCountType);
@@ -622,7 +576,7 @@ namespace System.Reactive.Unity.Linq
         /// If needs last result, you can take ObservableYieldInstruction.HasResult/Result property.
         /// This overload throws exception if received OnError events(same as coroutine).
         /// </summary>
-        public static ObservableYieldInstruction<T> ToYieldInstruction<T>(this IObservable<T> source)
+        public static ObservableYieldInstruction<T> ToYieldInstruction<T>(IObservable<T> source)
         {
             return new ObservableYieldInstruction<T>(source, true, CancellationToken.None);
         }
@@ -632,7 +586,7 @@ namespace System.Reactive.Unity.Linq
         /// If needs last result, you can take ObservableYieldInstruction.HasResult/Result property.
         /// This overload throws exception if received OnError events(same as coroutine).
         /// </summary>
-        public static ObservableYieldInstruction<T> ToYieldInstruction<T>(this IObservable<T> source, CancellationToken cancel)
+        public static ObservableYieldInstruction<T> ToYieldInstruction<T>(IObservable<T> source, CancellationToken cancel)
         {
             return new ObservableYieldInstruction<T>(source, true, cancel);
         }
@@ -642,7 +596,7 @@ namespace System.Reactive.Unity.Linq
         /// If needs last result, you can take ObservableYieldInstruction.HasResult/Result property.
         /// If throwOnError = false, you can take ObservableYieldInstruction.HasError/Error property.
         /// </summary>
-        public static ObservableYieldInstruction<T> ToYieldInstruction<T>(this IObservable<T> source, bool throwOnError)
+        public static ObservableYieldInstruction<T> ToYieldInstruction<T>(IObservable<T> source, bool throwOnError)
         {
             return new ObservableYieldInstruction<T>(source, throwOnError, CancellationToken.None);
         }
@@ -652,31 +606,31 @@ namespace System.Reactive.Unity.Linq
         /// If needs last result, you can take ObservableYieldInstruction.HasResult/Result property.
         /// If throwOnError = false, you can take ObservableYieldInstruction.HasError/Error property.
         /// </summary>
-        public static ObservableYieldInstruction<T> ToYieldInstruction<T>(this IObservable<T> source, bool throwOnError, CancellationToken cancel)
+        public static ObservableYieldInstruction<T> ToYieldInstruction<T>(IObservable<T> source, bool throwOnError, CancellationToken cancel)
         {
             return new ObservableYieldInstruction<T>(source, throwOnError, cancel);
         }
         
         /// <summary>Convert to awaitable IEnumerator.</summary>
-        public static IEnumerator ToAwaitableEnumerator<T>(this IObservable<T> source, CancellationToken cancel = default(CancellationToken))
+        public static IEnumerator ToAwaitableEnumerator<T>(IObservable<T> source, CancellationToken cancel = default(CancellationToken))
         {
             return ToAwaitableEnumerator<T>(source, Stubs<T>.Ignore, Stubs.Throw, cancel);
         }
 
         /// <summary>Convert to awaitable IEnumerator.</summary>
-        public static IEnumerator ToAwaitableEnumerator<T>(this IObservable<T> source, Action<T> onResult, CancellationToken cancel = default(CancellationToken))
+        public static IEnumerator ToAwaitableEnumerator<T>(IObservable<T> source, Action<T> onResult, CancellationToken cancel = default(CancellationToken))
         {
             return ToAwaitableEnumerator<T>(source, onResult, Stubs.Throw, cancel);
         }
 
         /// <summary>Convert to awaitable IEnumerator.</summary>
-        public static IEnumerator ToAwaitableEnumerator<T>(this IObservable<T> source, Action<Exception> onError, CancellationToken cancel = default(CancellationToken))
+        public static IEnumerator ToAwaitableEnumerator<T>(IObservable<T> source, Action<Exception> onError, CancellationToken cancel = default(CancellationToken))
         {
             return ToAwaitableEnumerator<T>(source, Stubs<T>.Ignore, onError, cancel);
         }
 
         /// <summary>Convert to awaitable IEnumerator.</summary>
-        public static IEnumerator ToAwaitableEnumerator<T>(this IObservable<T> source, Action<T> onResult, Action<Exception> onError, CancellationToken cancel = default(CancellationToken))
+        public static IEnumerator ToAwaitableEnumerator<T>(IObservable<T> source, Action<T> onResult, Action<Exception> onError, CancellationToken cancel = default(CancellationToken))
         {
             var enumerator = new ObservableYieldInstruction<T>(source, false, cancel);
             var e = (IEnumerator<T>)enumerator;
@@ -702,35 +656,35 @@ namespace System.Reactive.Unity.Linq
         }
 
         /// <summary>AutoStart observable as coroutine.</summary>
-        public static Coroutine StartAsCoroutine<T>(this IObservable<T> source, CancellationToken cancel = default(CancellationToken))
+        public static Coroutine StartAsCoroutine<T>(IObservable<T> source, CancellationToken cancel = default(CancellationToken))
         {
             return StartAsCoroutine<T>(source, Stubs<T>.Ignore, Stubs.Throw, cancel);
         }
 
         /// <summary>AutoStart observable as coroutine.</summary>
-        public static Coroutine StartAsCoroutine<T>(this IObservable<T> source, Action<T> onResult, CancellationToken cancel = default(CancellationToken))
+        public static Coroutine StartAsCoroutine<T>(IObservable<T> source, Action<T> onResult, CancellationToken cancel = default(CancellationToken))
         {
             return StartAsCoroutine<T>(source, onResult, Stubs.Throw, cancel);
         }
 
         /// <summary>AutoStart observable as coroutine.</summary>
-        public static Coroutine StartAsCoroutine<T>(this IObservable<T> source, Action<Exception> onError, CancellationToken cancel = default(CancellationToken))
+        public static Coroutine StartAsCoroutine<T>(IObservable<T> source, Action<Exception> onError, CancellationToken cancel = default(CancellationToken))
         {
             return StartAsCoroutine<T>(source, Stubs<T>.Ignore, onError, cancel);
         }
 
         /// <summary>AutoStart observable as coroutine.</summary>
-        public static Coroutine StartAsCoroutine<T>(this IObservable<T> source, Action<T> onResult, Action<Exception> onError, CancellationToken cancel = default(CancellationToken))
+        public static Coroutine StartAsCoroutine<T>(IObservable<T> source, Action<T> onResult, Action<Exception> onError, CancellationToken cancel = default(CancellationToken))
         {
             return MainThreadDispatcher.StartCoroutine(source.ToAwaitableEnumerator(onResult, onError, cancel));
         }
 
-        public static IObservable<T> ObserveOnMainThread<T>(this IObservable<T> source)
+        public static IObservable<T> ObserveOnMainThread<T>(IObservable<T> source)
         {
             return source.ObserveOn(Scheduler.MainThread);
         }
 
-        public static IObservable<T> ObserveOnMainThread<T>(this IObservable<T> source, MainThreadDispatchType dispatchType)
+        public static IObservable<T> ObserveOnMainThread<T>(IObservable<T> source, MainThreadDispatchType dispatchType)
         {
             switch (dispatchType)
             {
@@ -758,7 +712,7 @@ namespace System.Reactive.Unity.Linq
             }
         }
 
-        public static IObservable<T> SubscribeOnMainThread<T>(this IObservable<T> source)
+        public static IObservable<T> SubscribeOnMainThread<T>(IObservable<T> source)
         {
             return source.SubscribeOn(Scheduler.MainThread);
         }
@@ -805,57 +759,12 @@ namespace System.Reactive.Unity.Linq
             return MainThreadDispatcher.OnApplicationQuitAsObservable().Take(1);
         }
 
-        public static IObservable<T> TakeUntilDestroy<T>(this IObservable<T> source, Component target)
-        {
-            return source.TakeUntil(target.OnDestroyAsObservable());
-        }
-
-        public static IObservable<T> TakeUntilDestroy<T>(this IObservable<T> source, GameObject target)
-        {
-            return source.TakeUntil(target.OnDestroyAsObservable());
-        }
-
-        public static IObservable<T> TakeUntilDisable<T>(this IObservable<T> source, Component target)
-        {
-            return source.TakeUntil(target.OnDisableAsObservable());
-        }
-
-        public static IObservable<T> TakeUntilDisable<T>(this IObservable<T> source, GameObject target)
-        {
-            return source.TakeUntil(target.OnDisableAsObservable());
-        }
-
-        public static IObservable<T> RepeatUntilDestroy<T>(this IObservable<T> source, GameObject target)
-        {
-            return RepeatUntilCore(CoreObservable.RepeatInfinite(source), target.OnDestroyAsObservable(), target);
-        }
-
-        public static IObservable<T> RepeatUntilDestroy<T>(this IObservable<T> source, Component target)
-        {
-            return RepeatUntilCore(CoreObservable.RepeatInfinite(source), target.OnDestroyAsObservable(), (target != null) ? target.gameObject : null);
-        }
-
-        public static IObservable<T> RepeatUntilDisable<T>(this IObservable<T> source, GameObject target)
-        {
-            return RepeatUntilCore(CoreObservable.RepeatInfinite(source), target.OnDisableAsObservable(), target);
-        }
-
-        public static IObservable<T> RepeatUntilDisable<T>(this IObservable<T> source, Component target)
-        {
-            return RepeatUntilCore(CoreObservable.RepeatInfinite(source), target.OnDisableAsObservable(), (target != null) ? target.gameObject : null);
-        }
-
-        static IObservable<T> RepeatUntilCore<T>(this IEnumerable<IObservable<T>> sources, IObservable<Unit> trigger, GameObject lifeTimeChecker)
-        {
-            return new RepeatUntilObservable<T>(sources, trigger, lifeTimeChecker);
-        }
-
-        public static IObservable<FrameInterval<T>> FrameInterval<T>(this IObservable<T> source)
+        public static IObservable<FrameInterval<T>> FrameInterval<T>(IObservable<T> source)
         {
             return new FrameIntervalObservable<T>(source);
         }
 
-        public static IObservable<TimeInterval<T>> FrameTimeInterval<T>(this IObservable<T> source, bool ignoreTimeScale = false)
+        public static IObservable<TimeInterval<T>> FrameTimeInterval<T>(IObservable<T> source, bool ignoreTimeScale = false)
         {
             return new FrameTimeIntervalObservable<T>(source, ignoreTimeScale);
         }
@@ -863,7 +772,7 @@ namespace System.Reactive.Unity.Linq
         /// <summary>
         /// Buffer elements in during target frame counts. Default raise same frame of end(frameCount = 0, frameCountType = EndOfFrame).
         /// </summary>
-        public static IObservable<IList<T>> BatchFrame<T>(this IObservable<T> source)
+        public static IObservable<IList<T>> BatchFrame<T>(IObservable<T> source)
         {
             // if use default argument, comiler errors ambiguous(Unity's limitation)
             return BatchFrame<T>(source, 0, FrameCountType.EndOfFrame);
@@ -872,7 +781,7 @@ namespace System.Reactive.Unity.Linq
         /// <summary>
         /// Buffer elements in during target frame counts.
         /// </summary>
-        public static IObservable<IList<T>> BatchFrame<T>(this IObservable<T> source, int frameCount, FrameCountType frameCountType)
+        public static IObservable<IList<T>> BatchFrame<T>(IObservable<T> source, int frameCount, FrameCountType frameCountType)
         {
             if (frameCount < 0) throw new ArgumentException("frameCount must be >= 0, frameCount:" + frameCount);
             return new BatchFrameObservable<T>(source, frameCount, frameCountType);
@@ -881,7 +790,7 @@ namespace System.Reactive.Unity.Linq
         /// <summary>
         /// Wait command in during target frame counts. Default raise same frame of end(frameCount = 0, frameCountType = EndOfFrame).
         /// </summary>
-        public static IObservable<Unit> BatchFrame(this IObservable<Unit> source)
+        public static IObservable<Unit> BatchFrame(IObservable<Unit> source)
         {
             return BatchFrame(source, 0, FrameCountType.EndOfFrame);
         }
@@ -889,7 +798,7 @@ namespace System.Reactive.Unity.Linq
         /// <summary>
         /// Wait command in during target frame counts.
         /// </summary>
-        public static IObservable<Unit> BatchFrame(this IObservable<Unit> source, int frameCount, FrameCountType frameCountType)
+        public static IObservable<Unit> BatchFrame(IObservable<Unit> source, int frameCount, FrameCountType frameCountType)
         {
             if (frameCount < 0) throw new ArgumentException("frameCount must be >= 0, frameCount:" + frameCount);
             return new BatchFrameObservable(source, frameCount, frameCountType);

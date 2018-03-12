@@ -333,10 +333,11 @@
     <Compile Include="Assets\Plugins\System.Reactive.Unity\InspectorDisplayDrawer.cs" />
     <Compile Include="Assets\Plugins\System.Reactive.Unity\LazyTask.cs" />
     <Compile Include="Assets\Plugins\System.Reactive.Unity\LifetimeDisposableExtensions.cs" />
+    <Compile Include="Assets\Plugins\System.Reactive.Unity\Linq\EnumeratorExtensions.cs" />
     <Compile Include="Assets\Plugins\System.Reactive.Unity\Linq\ObservableExtensions.cs" />
     <Compile Include="Assets\Plugins\System.Reactive.Unity\Schedulers\MainThreadDispatcher.cs" />
     <Compile Include="Assets\Plugins\System.Reactive.Unity\Schedulers\MainThreadScheduler.cs" />
-    <Compile Include="Assets\Plugins\System.Reactive.Unity\Observable.cs" />
+    <Compile Include="Assets\Plugins\System.Reactive.Unity\Linq\Observable.cs" />
     <Compile Include="Assets\Plugins\System.Reactive.Unity\Observable.Unity.cs" />
     <Compile Include="Assets\Plugins\System.Reactive.Unity\ObservableMonoBehaviour.cs" />
     <Compile Include="Assets\Plugins\System.Reactive.Unity\ObservableWWW.cs" />

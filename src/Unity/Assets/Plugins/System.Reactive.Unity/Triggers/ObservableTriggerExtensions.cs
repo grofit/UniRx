@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Reactive.Unity.Linq;
+using UnityEngine;
 // require keep for Windows Universal App
 
 namespace System.Reactive.Unity.Triggers

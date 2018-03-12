@@ -2,22 +2,19 @@ using System.Collections;
 using System.Reactive.Disposables;
 using System.Reactive.Schedulers;
 using UnityEngine;
-using CoreScheduler = System.Reactive.Schedulers.Scheduler;
 
 namespace System.Reactive.Unity.Schedulers
 {
-    public static partial class Scheduler
+    public partial class Scheduler : Reactive.Schedulers.Scheduler
     {
-        // TODO LOOK INTO THIS
-        /*
         public static void SetDefaultForUnity()
         {
-            Scheduler.DefaultSchedulers.ConstantTimeOperations = Scheduler.Immediate;
-            Scheduler.DefaultSchedulers.TailRecursion = Scheduler.Immediate;
-            Scheduler.DefaultSchedulers.Iteration = Scheduler.CurrentThread;
-            Scheduler.DefaultSchedulers.TimeBasedOperations = MainThread;
-            Scheduler.DefaultSchedulers.AsyncConversions = Scheduler.ThreadPool;
-        }*/
+            DefaultSchedulers.ConstantTimeOperations = Immediate;
+            DefaultSchedulers.TailRecursion = Immediate;
+            DefaultSchedulers.Iteration = CurrentThread;
+            DefaultSchedulers.TimeBasedOperations = MainThread;
+            DefaultSchedulers.AsyncConversions = ThreadPool;
+        }
 
         static IScheduler mainThread;
 
@@ -129,7 +126,7 @@ namespace System.Reactive.Unity.Schedulers
 
             public DateTimeOffset Now
             {
-                get { return CoreScheduler.Now; }
+                get { return Now; }
             }
 
             void Schedule(object state)
@@ -156,7 +153,7 @@ namespace System.Reactive.Unity.Schedulers
             public IDisposable Schedule(TimeSpan dueTime, Action action)
             {
                 var d = new BooleanDisposable();
-                var time = CoreScheduler.Normalize(dueTime);
+                var time = Normalize(dueTime);
 
                 MainThreadDispatcher.SendStartCoroutine(DelayAction(time, action, d));
 
@@ -166,7 +163,7 @@ namespace System.Reactive.Unity.Schedulers
             public IDisposable SchedulePeriodic(TimeSpan period, Action action)
             {
                 var d = new BooleanDisposable();
-                var time = CoreScheduler.Normalize(period);
+                var time = Normalize(period);
 
                 MainThreadDispatcher.SendStartCoroutine(PeriodicAction(time, action, d));
 
@@ -275,7 +272,7 @@ namespace System.Reactive.Unity.Schedulers
 
             public DateTimeOffset Now
             {
-                get { return CoreScheduler.Now; }
+                get { return Now; }
             }
 
             void Schedule(object state)
@@ -302,7 +299,7 @@ namespace System.Reactive.Unity.Schedulers
             public IDisposable Schedule(TimeSpan dueTime, Action action)
             {
                 var d = new BooleanDisposable();
-                var time = CoreScheduler.Normalize(dueTime);
+                var time = Normalize(dueTime);
 
                 MainThreadDispatcher.SendStartCoroutine(DelayAction(time, action, d));
 
@@ -312,7 +309,7 @@ namespace System.Reactive.Unity.Schedulers
             public IDisposable SchedulePeriodic(TimeSpan period, Action action)
             {
                 var d = new BooleanDisposable();
-                var time = CoreScheduler.Normalize(period);
+                var time = Normalize(period);
 
                 MainThreadDispatcher.SendStartCoroutine(PeriodicAction(time, action, d));
 
@@ -418,7 +415,7 @@ namespace System.Reactive.Unity.Schedulers
 
             public DateTimeOffset Now
             {
-                get { return CoreScheduler.Now; }
+                get { return Now; }
             }
 
             public IDisposable Schedule(Action action)
@@ -434,7 +431,7 @@ namespace System.Reactive.Unity.Schedulers
             public IDisposable Schedule(TimeSpan dueTime, Action action)
             {
                 var d = new BooleanDisposable();
-                var time = CoreScheduler.Normalize(dueTime);
+                var time = Normalize(dueTime);
 
                 MainThreadDispatcher.StartFixedUpdateMicroCoroutine(DelayAction(time, action, d));
 
@@ -444,7 +441,7 @@ namespace System.Reactive.Unity.Schedulers
             public IDisposable SchedulePeriodic(TimeSpan period, Action action)
             {
                 var d = new BooleanDisposable();
-                var time = CoreScheduler.Normalize(period);
+                var time = Normalize(period);
 
                 MainThreadDispatcher.StartFixedUpdateMicroCoroutine(PeriodicAction(time, action, d));
 
@@ -534,7 +531,7 @@ namespace System.Reactive.Unity.Schedulers
 
             public DateTimeOffset Now
             {
-                get { return CoreScheduler.Now; }
+                get { return Now; }
             }
 
             public IDisposable Schedule(Action action)
@@ -550,7 +547,7 @@ namespace System.Reactive.Unity.Schedulers
             public IDisposable Schedule(TimeSpan dueTime, Action action)
             {
                 var d = new BooleanDisposable();
-                var time = CoreScheduler.Normalize(dueTime);
+                var time = Normalize(dueTime);
 
                 MainThreadDispatcher.StartEndOfFrameMicroCoroutine(DelayAction(time, action, d));
 
@@ -560,7 +557,7 @@ namespace System.Reactive.Unity.Schedulers
             public IDisposable SchedulePeriodic(TimeSpan period, Action action)
             {
                 var d = new BooleanDisposable();
-                var time = CoreScheduler.Normalize(period);
+                var time = Normalize(period);
 
                 MainThreadDispatcher.StartEndOfFrameMicroCoroutine(PeriodicAction(time, action, d));
 
