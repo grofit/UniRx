@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Reactive;
+using System.Reactive.Extensions;
 using System.Reactive.Unity;
+using System.Reactive.Unity.Linq;
 using UnityEngine;
 
 namespace UniRx.Examples

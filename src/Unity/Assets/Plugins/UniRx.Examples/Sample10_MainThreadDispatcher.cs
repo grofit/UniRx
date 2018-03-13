@@ -3,6 +3,7 @@ using System.Collections;
 using System.Reactive;
 using System.Reactive.Unity;
 using System.Reactive.Unity.Linq;
+using System.Reactive.Unity.Schedulers;
 using UnityEngine;
 
 namespace UniRx.Examples

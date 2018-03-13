@@ -1,4 +1,6 @@
-﻿namespace System.Reactive.Operators
+﻿using System.Reactive.Extensions;
+
+namespace System.Reactive.Operators
 {
     public class DematerializeObservable<T> : OperatorObservableBase<T>
     {

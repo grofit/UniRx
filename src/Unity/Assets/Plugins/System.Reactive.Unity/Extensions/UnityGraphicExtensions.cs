@@ -1,14 +1,11 @@
-﻿// for uGUI(from 4.6)
-#if !(UNITY_4_0 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3 || UNITY_4_4 || UNITY_4_5)
-
-using System.Reactive.Disposables;
+﻿using System.Reactive.Disposables;
 using System.Reactive.Unity.Linq;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace System.Reactive.Unity
+namespace System.Reactive.Unity.Extensions
 {
-    public static partial class UnityGraphicExtensions
+    public static class UnityGraphicExtensions
     {
         public static IObservable<Unit> DirtyLayoutCallbackAsObservable(this Graphic graphic)
         {
@@ -41,5 +38,3 @@ namespace System.Reactive.Unity
         }
     }
 }
-
-#endif

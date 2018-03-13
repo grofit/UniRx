@@ -4,6 +4,7 @@
     {
         public static readonly TimeSpan InfiniteTimeSpan = new TimeSpan(0, 0, 0, 0, -1); // from .NET 4.5
 
-        private Observable(){ }
+        // Stops instantiation, but allows for extension
+        protected Observable(){ }
     }
 }

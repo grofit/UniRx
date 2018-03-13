@@ -77,15 +77,9 @@ namespace System.Reactive.Unity
             }
         }
 
-        public bool HasError
-        {
-            get { return error != null; }
-        }
+        public bool HasError => error != null;
 
-        public bool HasResult
-        {
-            get { return hasResult; }
-        }
+        public bool HasResult => hasResult;
 
         public bool IsCanceled
         {
@@ -100,42 +94,15 @@ namespace System.Reactive.Unity
         /// <summary>
         /// HasResult || IsCanceled || HasError
         /// </summary>
-        public bool IsDone
-        {
-            get
-            {
-                return HasResult || HasError || (cancel.IsCancellationRequested);
-            }
-        }
+        public bool IsDone => HasResult || HasError || (cancel.IsCancellationRequested);
 
-        public T Result
-        {
-            get { return result; }
-        }
+        public T Result => result;
 
-        T IEnumerator<T>.Current
-        {
-            get
-            {
-                return current;
-            }
-        }
+        T IEnumerator<T>.Current => current;
 
-        object IEnumerator.Current
-        {
-            get
-            {
-                return current;
-            }
-        }
+        object IEnumerator.Current => current;
 
-        public Exception Error
-        {
-            get
-            {
-                return error;
-            }
-        }
+        public Exception Error => error;
 
         bool IEnumerator.MoveNext()
         {

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reactive.Extensions;
 using System.Reactive.Schedulers;
 using System.Reactive.Subjects;
 using System.Reactive.Tests.Tools;

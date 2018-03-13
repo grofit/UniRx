@@ -1,5 +1,6 @@
 ﻿#if (NET_4_6)
 
+using System.Reactive.Unity.Schedulers;
 using System.Threading;
 
 namespace System.Reactive.Unity

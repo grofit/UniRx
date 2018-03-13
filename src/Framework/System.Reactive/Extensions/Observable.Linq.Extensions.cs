@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Reactive.Operators;
 
-namespace System.Reactive.Linq
+namespace System.Reactive.Extensions
 {
-    public static class ObservableLinqExtensions
+    public static partial class ObservableExtensions
     {
         public static IObservable<TR> Select<T, TR>(this IObservable<T> source, Func<T, TR> selector)
         {

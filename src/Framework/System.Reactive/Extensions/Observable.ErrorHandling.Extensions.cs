@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Reactive.Operators;
+using System.Reactive.Linq;
 using System.Reactive.Schedulers;
 
-namespace System.Reactive.Linq
+namespace System.Reactive.Extensions
 {
-    public static class ObservableErrorHandlingExtensions
+    public static partial class ObservableExtensions
     {
         /// <summary>
         /// <para>Repeats the source observable sequence until it successfully terminates.</para>

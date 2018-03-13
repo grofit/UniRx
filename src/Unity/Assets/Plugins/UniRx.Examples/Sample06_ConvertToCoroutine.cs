@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections;
+using System.Reactive.Extensions;
 using System.Reactive.Unity;
+using System.Reactive.Unity.Linq;
+using System.Reactive.Unity.Schedulers;
 using UnityEngine;
 
 namespace UniRx.Examples
@@ -31,7 +34,6 @@ namespace UniRx.Examples
         // Note:ToAwaitableEnumerator/StartAsCoroutine/LazyTask are obsolete way on Unity 5.3
         // You can use ToYieldInstruction.
 
-#if !(UNITY_4_0 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3 || UNITY_4_4 || UNITY_4_5 || UNITY_4_6 || UNITY_5_0 || UNITY_5_1 || UNITY_5_2)
 
         IEnumerator TestNewCustomYieldInstruction()
         {
@@ -51,8 +53,5 @@ namespace UniRx.Examples
             // other sample(wait until transform.position.y >= 100) 
             yield return this.ObserveEveryValueChanged(x => x.transform).FirstOrDefault(x => x.position.y >= 100).ToYieldInstruction();
         }
-
-#endif
-
     }
 }

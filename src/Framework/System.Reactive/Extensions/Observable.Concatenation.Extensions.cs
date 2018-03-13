@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Reactive.Linq;
 using System.Reactive.Operators;
 using System.Reactive.Schedulers;
 
-namespace System.Reactive.Linq
+namespace System.Reactive.Extensions
 {
-    public static class ObservableConcatenationExtensions
+    public static partial class ObservableExtensions
     {
         public static IObservable<TSource> Concat<TSource>(this IEnumerable<IObservable<TSource>> sources) =>
             Observable.Concat(sources);

@@ -1,15 +1,13 @@
 ﻿// this code is borrowed from RxOfficial(rx.codeplex.com) and modified
 
-using System;
-using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Schedulers;
 using System.Reactive.Subjects;
-using System.Threading.Tasks;
 using System.Threading;
+using System.Threading.Tasks;
 
-namespace UniRx
+namespace System.Reactive.Extensions
 {
     /// <summary>
     /// Provides a set of static methods for converting tasks to observable sequences.

@@ -1,7 +1,3 @@
-#if !(UNITY_4_0 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3 || UNITY_4_4 || UNITY_4_5 || UNITY_4_6 || UNITY_5_0 || UNITY_5_1 || UNITY_5_2)
-#define SupportCustomYieldInstruction
-#endif
-
 using System.Collections;
 using System.Reactive.InternalUtil;
 using System.Reactive.Subjects;
@@ -9,7 +5,7 @@ using System.Reflection;
 using System.Threading;
 using UnityEngine;
 
-namespace System.Reactive.Unity
+namespace System.Reactive.Unity.Schedulers
 {
     public sealed class MainThreadDispatcher : MonoBehaviour
     {
@@ -141,15 +137,12 @@ namespace System.Reactive.Unity
                         Debug.Log("Can't wait coroutine on UnityEditor");
                         goto ENQUEUE;
                     }
-#if SupportCustomYieldInstruction
                     else if (current is IEnumerator)
                     {
                         var enumerator = (IEnumerator)current;
                         editorQueueWorker.Enqueue(_ => ConsumeEnumerator(UnwrapEnumerator(enumerator, routine)), null);
                         return;
                     }
-#endif
-
                     ENQUEUE:
                     editorQueueWorker.Enqueue(_ => ConsumeEnumerator(routine), null); // next update
                 }
@@ -481,12 +474,10 @@ namespace System.Reactive.Unity
                 mainThreadToken = new object();
                 initialized = true;
 
-#if (NET_4_6)
                 if (UniRxSynchronizationContext.AutoInstall)
                 {
                     SynchronizationContext.SetSynchronizationContext(new UniRxSynchronizationContext());
                 }
-#endif
 
                 updateMicroCoroutine = new MicroCoroutine(ex => unhandledExceptionCallback(ex));
                 fixedUpdateMicroCoroutine = new MicroCoroutine(ex => unhandledExceptionCallback(ex));

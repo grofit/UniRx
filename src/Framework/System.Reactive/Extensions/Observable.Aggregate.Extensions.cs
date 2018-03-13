@@ -1,8 +1,8 @@
-﻿using System.Reactive.Operators;
+﻿using System.Reactive.Linq;
 
-namespace System.Reactive.Linq
+namespace System.Reactive.Extensions
 {
-    public static class ObservableAggregateExtensions
+    public static partial class ObservableExtensions
     {
         public static IObservable<TSource> Scan<TSource>(this IObservable<TSource> source, Func<TSource, TSource, TSource> accumulator) => Observable.Scan(source, accumulator);
         public static IObservable<TAccumulate> Scan<TSource, TAccumulate>(this IObservable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator) => Observable.Scan(source, seed, accumulator);

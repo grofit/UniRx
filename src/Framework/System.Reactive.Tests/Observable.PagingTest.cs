@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Reactive.Linq;
+using System.Reactive.Extensions;
 using System.Reactive.Subjects;
 using System.Reactive.Tests.Tools;
 using System.Threading;

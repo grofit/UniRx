@@ -1,9 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Reactive.Linq;
-using System.Reactive.Operators;
+using System.Reactive.Extensions;
 using System.Reactive.Unity.Operators;
-using System.Reactive.Unity.Schedulers;
 using System.Reactive.Unity.Triggers;
 using System.Threading;
 using UnityEngine;
@@ -12,60 +10,6 @@ namespace System.Reactive.Unity.Linq
 {
     public static class ObservableExtensions
     {
-        public static IObservable<TSource> Distinct<TSource>(this IObservable<TSource> source)
-        {
-            var comparer = UnityEqualityComparer.GetDefault<TSource>();
-            return new DistinctObservable<TSource>(source, comparer);
-        }
-
-        public static IObservable<TSource> Distinct<TSource, TKey>(this IObservable<TSource> source, Func<TSource, TKey> keySelector)
-        {
-            var comparer = UnityEqualityComparer.GetDefault<TKey>();
-            return new DistinctObservable<TSource, TKey>(source, keySelector, comparer);
-        }
-
-        public static IObservable<T> DistinctUntilChanged<T>(this IObservable<T> source)
-        {
-            var comparer = UnityEqualityComparer.GetDefault<T>();
-            return new DistinctUntilChangedObservable<T>(source, comparer);
-        }
-
-        public static IObservable<T> DistinctUntilChanged<T, TKey>(this IObservable<T> source, Func<T, TKey> keySelector)
-        {
-            var comparer = UnityEqualityComparer.GetDefault<TKey>();
-            return new DistinctUntilChangedObservable<T, TKey>(source, keySelector, comparer);
-        }
-
-        public static IObservable<IGroupedObservable<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IObservable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
-        {
-            var comparer = UnityEqualityComparer.GetDefault<TKey>();
-            return source.GroupBy(keySelector, elementSelector, comparer);
-        }
-
-        public static IObservable<IGroupedObservable<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IObservable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, int capacity)
-        {
-            var comparer = UnityEqualityComparer.GetDefault<TKey>();
-            return source.GroupBy(keySelector, elementSelector, capacity, comparer);
-        }
-
-        public static IObservable<Unit> SelectMany<T>(this IObservable<T> source, IEnumerator coroutine, bool publishEveryYield = false)
-        {
-            return source.SelectMany(Observable.FromCoroutine(() => coroutine, publishEveryYield));
-        }
-
-        public static IObservable<Unit> SelectMany<T>(this IObservable<T> source, Func<IEnumerator> selector, bool publishEveryYield = false)
-        {
-            return source.SelectMany(Observable.FromCoroutine(() => selector(), publishEveryYield));
-        }
-
-        /// <summary>
-        /// Note: publishEveryYield is always false. If you want to set true, use Observable.FromCoroutine(() => selector(x), true). This is workaround of Unity compiler's bug.
-        /// </summary>
-        public static IObservable<Unit> SelectMany<T>(this IObservable<T> source, Func<T, IEnumerator> selector)
-        {
-            return source.SelectMany(x => Observable.FromCoroutine(() => selector(x), false));
-        }
-
         public static IObservable<T> TakeUntilDestroy<T>(this IObservable<T> source, Component target)
         {
             return source.TakeUntil(target.OnDestroyAsObservable());
@@ -248,6 +192,5 @@ namespace System.Reactive.Unity.Linq
         /// </summary>
         public static IObservable<Unit> BatchFrame(this IObservable<Unit> source, int frameCount,
             FrameCountType frameCountType) => Observable.BatchFrame(source, frameCount, frameCountType);
-
     }
 }

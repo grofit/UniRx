@@ -30,13 +30,13 @@ namespace System.Reactive.Unity
         {
             var t = RuntimeTypeHandlerCache<T>.TypeHandle;
 
-            if (t.Equals(vector2Type)) return (IEqualityComparer<T>)UnityEqualityComparer.Vector2;
-            if (t.Equals(vector3Type)) return (IEqualityComparer<T>)UnityEqualityComparer.Vector3;
-            if (t.Equals(vector4Type)) return (IEqualityComparer<T>)UnityEqualityComparer.Vector4;
-            if (t.Equals(colorType)) return (IEqualityComparer<T>)UnityEqualityComparer.Color;
-            if (t.Equals(rectType)) return (IEqualityComparer<T>)UnityEqualityComparer.Rect;
-            if (t.Equals(boundsType)) return (IEqualityComparer<T>)UnityEqualityComparer.Bounds;
-            if (t.Equals(quaternionType)) return (IEqualityComparer<T>)UnityEqualityComparer.Quaternion;
+            if (t.Equals(vector2Type)) return (IEqualityComparer<T>)Vector2;
+            if (t.Equals(vector3Type)) return (IEqualityComparer<T>)Vector3;
+            if (t.Equals(vector4Type)) return (IEqualityComparer<T>)Vector4;
+            if (t.Equals(colorType)) return (IEqualityComparer<T>)Color;
+            if (t.Equals(rectType)) return (IEqualityComparer<T>)Rect;
+            if (t.Equals(boundsType)) return (IEqualityComparer<T>)Bounds;
+            if (t.Equals(quaternionType)) return (IEqualityComparer<T>)Quaternion;
 
             return EqualityComparer<T>.Default;
         }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Reactive;
+using System.Reactive.Extensions;
 using System.Reactive.Unity.Diagnostics;
 using UnityEngine;
 using Logger = System.Reactive.Unity.Diagnostics.Logger;

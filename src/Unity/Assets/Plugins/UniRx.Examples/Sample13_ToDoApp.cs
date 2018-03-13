@@ -9,6 +9,7 @@ using System.Reactive;
 using System.Reactive.Extensions;
 using System.Reactive.Linq;
 using System.Reactive.Unity;
+using System.Reactive.Unity.Extensions;
 using UnityEngine.EventSystems;
 
 namespace UniRx.Examples

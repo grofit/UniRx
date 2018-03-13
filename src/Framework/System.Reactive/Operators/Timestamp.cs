@@ -1,4 +1,5 @@
-﻿using System.Reactive.Schedulers;
+﻿using System.Reactive.Extensions;
+using System.Reactive.Schedulers;
 
 namespace System.Reactive.Operators
 {

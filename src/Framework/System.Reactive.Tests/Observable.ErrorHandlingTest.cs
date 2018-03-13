@@ -1,5 +1,6 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Schedulers;
+using System.Reactive.Extensions;
 using System.Reactive.Tests.Tools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

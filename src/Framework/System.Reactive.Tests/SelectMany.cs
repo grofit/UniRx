@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Linq;
+using System.Reactive.Extensions;
 using System.Reactive.Subjects;
 using System.Reactive.Tests.Tools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace System.Reactive.Tests
 {
-    [Microsoft.VisualStudio.TestTools.UnitTesting.TestClass]
+    [TestClass]
     public class SelectMany
     {
         [TestMethod]

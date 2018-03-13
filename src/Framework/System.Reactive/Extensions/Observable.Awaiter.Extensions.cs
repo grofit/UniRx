@@ -1,9 +1,10 @@
-﻿using System.Reactive.Subjects;
+﻿using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading;
 
-namespace System.Reactive.Linq
+namespace System.Reactive.Extensions
 {
-    public static class ObservableAwaiterExtensions
+    public static partial class ObservableExtensions
     {
         /// <summary>
         /// Gets an awaiter that returns the last value of the observable sequence or throws an exception if the sequence is empty.

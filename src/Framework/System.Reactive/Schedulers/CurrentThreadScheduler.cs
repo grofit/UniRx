@@ -13,7 +13,7 @@ namespace System.Reactive.Schedulers
     {
         public static readonly IScheduler CurrentThread = new CurrentThreadScheduler();
 
-        public static bool IsCurrentThreadSchedulerScheduleRequired { get { return CurrentThreadScheduler.IsScheduleRequired; } }
+        public static bool IsCurrentThreadSchedulerScheduleRequired => CurrentThreadScheduler.IsScheduleRequired;
 
         /// <summary>
         /// Represents an object that schedules units of work on the current thread.

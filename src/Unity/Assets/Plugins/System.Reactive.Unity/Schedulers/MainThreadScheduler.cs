@@ -13,60 +13,40 @@ namespace System.Reactive.Unity.Schedulers
             DefaultSchedulers.TailRecursion = Immediate;
             DefaultSchedulers.Iteration = CurrentThread;
             DefaultSchedulers.TimeBasedOperations = MainThread;
+#if UNITY_WEBGL
+            DefaultSchedulers.AsyncConversions = MainThread;
+#else
             DefaultSchedulers.AsyncConversions = ThreadPool;
+#endif
         }
 
         static IScheduler mainThread;
-
+        
         /// <summary>
         /// Unity native MainThread Queue Scheduler. Run on mainthread and delayed on coroutine update loop, elapsed time is calculated based on Time.time.
         /// </summary>
-        public static IScheduler MainThread
-        {
-            get
-            {
-                return mainThread ?? (mainThread = new MainThreadScheduler());
-            }
-        }
+        public static IScheduler MainThread => mainThread ?? (mainThread = new MainThreadScheduler());
 
         static IScheduler mainThreadIgnoreTimeScale;
 
         /// <summary>
         /// Another MainThread scheduler, delay elapsed time is calculated based on Time.unscaledDeltaTime.
         /// </summary>
-        public static IScheduler MainThreadIgnoreTimeScale
-        {
-            get
-            {
-                return mainThreadIgnoreTimeScale ?? (mainThreadIgnoreTimeScale = new IgnoreTimeScaleMainThreadScheduler());
-            }
-        }
+        public static IScheduler MainThreadIgnoreTimeScale => mainThreadIgnoreTimeScale ?? (mainThreadIgnoreTimeScale = new IgnoreTimeScaleMainThreadScheduler());
 
         static IScheduler mainThreadFixedUpdate;
 
         /// <summary>
         /// Run on fixed update mainthread, delay elapsed time is calculated based on Time.fixedTime.
         /// </summary>
-        public static IScheduler MainThreadFixedUpdate
-        {
-            get
-            {
-                return mainThreadFixedUpdate ?? (mainThreadFixedUpdate = new FixedUpdateMainThreadScheduler());
-            }
-        }
+        public static IScheduler MainThreadFixedUpdate => mainThreadFixedUpdate ?? (mainThreadFixedUpdate = new FixedUpdateMainThreadScheduler());
 
         static IScheduler mainThreadEndOfFrame;
 
         /// <summary>
         /// Run on end of frame mainthread, delay elapsed time is calculated based on Time.deltaTime.
         /// </summary>
-        public static IScheduler MainThreadEndOfFrame
-        {
-            get
-            {
-                return mainThreadEndOfFrame ?? (mainThreadEndOfFrame = new EndOfFrameMainThreadScheduler());
-            }
-        }
+        public static IScheduler MainThreadEndOfFrame => mainThreadEndOfFrame ?? (mainThreadEndOfFrame = new EndOfFrameMainThreadScheduler());
 
         class MainThreadScheduler : IScheduler, ISchedulerPeriodic, ISchedulerQueueing
         {
@@ -124,10 +104,7 @@ namespace System.Reactive.Unity.Schedulers
                 }
             }
 
-            public DateTimeOffset Now
-            {
-                get { return Now; }
-            }
+            public DateTimeOffset Now => Now;
 
             void Schedule(object state)
             {
@@ -270,10 +247,7 @@ namespace System.Reactive.Unity.Schedulers
                 }
             }
 
-            public DateTimeOffset Now
-            {
-                get { return Now; }
-            }
+            public DateTimeOffset Now => Now;
 
             void Schedule(object state)
             {
@@ -413,10 +387,7 @@ namespace System.Reactive.Unity.Schedulers
                 }
             }
 
-            public DateTimeOffset Now
-            {
-                get { return Now; }
-            }
+            public DateTimeOffset Now => Now;
 
             public IDisposable Schedule(Action action)
             {
@@ -529,10 +500,7 @@ namespace System.Reactive.Unity.Schedulers
                 }
             }
 
-            public DateTimeOffset Now
-            {
-                get { return Now; }
-            }
+            public DateTimeOffset Now => Now;
 
             public IDisposable Schedule(Action action)
             {

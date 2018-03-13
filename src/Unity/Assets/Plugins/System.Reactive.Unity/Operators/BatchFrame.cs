@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Reactive.Disposables;
+using System.Reactive.Extensions;
 using System.Reactive.Operators;
+using System.Reactive.Unity.Schedulers;
 
 namespace System.Reactive.Unity.Operators
 {

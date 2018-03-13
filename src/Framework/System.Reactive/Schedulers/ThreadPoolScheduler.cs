@@ -16,16 +16,13 @@ namespace System.Reactive.Schedulers
             {
             }
 
-            public DateTimeOffset Now
-            {
-                get { return Scheduler.Now; }
-            }
+            public DateTimeOffset Now => Scheduler.Now;
 
             public IDisposable Schedule(Action action)
             {
                 var d = new BooleanDisposable();
 
-                System.Threading.ThreadPool.QueueUserWorkItem(_ =>
+                Threading.ThreadPool.QueueUserWorkItem(_ =>
                 {
                     if (!d.IsDisposed)
                     {
@@ -53,7 +50,7 @@ namespace System.Reactive.Schedulers
 
             public void ScheduleQueueing<T>(ICancelable cancel, T state, Action<T> action)
             {
-                System.Threading.ThreadPool.QueueUserWorkItem(callBackState =>
+                Threading.ThreadPool.QueueUserWorkItem(callBackState =>
                 {
                     if (!cancel.IsDisposed)
                     {

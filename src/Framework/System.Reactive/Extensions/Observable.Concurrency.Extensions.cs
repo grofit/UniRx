@@ -1,8 +1,9 @@
-﻿using System.Reactive.Schedulers;
+﻿using System.Reactive.Linq;
+using System.Reactive.Schedulers;
 
-namespace System.Reactive.Linq
+namespace System.Reactive.Extensions
 {
-    public static class ObservableConcurrencyExtensions
+    public static partial class ObservableExtensions
     {
         public static IObservable<T> Synchronize<T>(this IObservable<T> source) => Observable.Synchronize(source);
 

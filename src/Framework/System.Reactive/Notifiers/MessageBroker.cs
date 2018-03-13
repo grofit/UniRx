@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reactive.Extensions;
 using System.Reactive.InternalUtil;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;

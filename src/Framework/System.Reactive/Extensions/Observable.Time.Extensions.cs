@@ -1,9 +1,9 @@
-﻿using System.Reactive.Operators;
+﻿using System.Reactive.Linq;
 using System.Reactive.Schedulers;
 
-namespace System.Reactive.Linq
+namespace System.Reactive.Extensions
 {
-    public static class ObservableTimeExtensions
+    public static partial class ObservableExtensions
     {
         public static IObservable<Timestamped<TSource>> Timestamp<TSource>(this IObservable<TSource> source) => Observable.Timestamp(source);
 

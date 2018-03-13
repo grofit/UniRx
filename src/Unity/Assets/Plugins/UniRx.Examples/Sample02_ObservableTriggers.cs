@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 // Triggers Namepsace
-using System;
-using System.Reactive.Unity;
+using System.Reactive;
+using System.Reactive.Unity.Linq;
 using System.Reactive.Unity.Triggers;
 
 namespace UniRx.Examples

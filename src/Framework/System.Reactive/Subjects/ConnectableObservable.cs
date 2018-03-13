@@ -1,4 +1,5 @@
-﻿using System.Reactive.Linq;
+﻿using System.Reactive.Extensions;
+using System.Reactive.Linq;
 
 namespace System.Reactive.Subjects
 {

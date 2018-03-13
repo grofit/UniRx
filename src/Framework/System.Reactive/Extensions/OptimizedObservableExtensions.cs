@@ -1,8 +1,8 @@
 ﻿using System.Reactive.Schedulers;
 
-namespace System.Reactive
+namespace System.Reactive.Extensions
 {
-    public static class OptimizedObservableExtensions
+    public static partial class ObservableExtensions
     {
         public static bool IsRequiredSubscribeOnCurrentThread<T>(this IObservable<T> source)
         {

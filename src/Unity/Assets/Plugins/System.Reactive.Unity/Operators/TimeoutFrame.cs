@@ -1,4 +1,5 @@
 ﻿using System.Reactive.Disposables;
+using System.Reactive.Extensions;
 using System.Reactive.Unity.Linq;
 using System.Reactive.Operators;
 

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Reactive.Linq;
+using System.Reactive.Extensions;
 using System.Reactive.Subjects;
 using System.Reactive.Tests.Tools;
 using System.Threading;
@@ -15,7 +16,7 @@ namespace System.Reactive.Tests
         {
             var subject = new Subject<int>();
 
-            var record = subject.ContinueWith(x => Observable.Return(x)).Record();
+            var record = subject.ContinueWith(Observable.Return).Record();
 
             subject.OnNext(10);
             record.Values.Count.Is(0);

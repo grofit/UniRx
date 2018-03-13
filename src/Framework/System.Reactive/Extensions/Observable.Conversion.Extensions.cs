@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Reactive.Operators;
+using System.Reactive.Linq;
 using System.Reactive.Schedulers;
 
-namespace System.Reactive.Linq
+namespace System.Reactive.Extensions
 {
-    public static class ObservableConversionExtensions
+    public static partial class ObservableExtensions
     {
         public static IObservable<T> AsObservable<T>(this IObservable<T> source) => 
             Observable.AsObservable(source);

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Reactive.Extensions;
 using System.Reactive.Tests.Tools;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

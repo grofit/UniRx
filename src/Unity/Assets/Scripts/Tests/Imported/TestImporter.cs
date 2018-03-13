@@ -1,10 +1,19 @@
 ﻿#pragma warning disable 168
-#if !UNITY_METRO && !UNITY_4_5
+#if !UNITY_METRO
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Disposables;
+using System.Reactive.Extensions;
+using System.Reactive.InternalUtil;
+using System.Reactive.Subjects;
 using System.Reactive.Unity;
+using System.Reactive.Linq;
+using System.Reactive.Unity.Linq;
+using Observable = System.Reactive.Unity.Linq.Observable;
+using System.Reactive.Unity.Schedulers;
 using System.Text;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -73,7 +82,7 @@ namespace RuntimeUnitTestToolkit
             Observable.Range(1, 5).Aggregate(100, (x, y) => x + y).Wait().Is(115);
             Observable.Empty<int>().Aggregate(100, (x, y) => x + y, x => x + x).Wait().Is(200);
             Observable.Range(1, 5).Aggregate(100, (x, y) => x + y, x => x + x).Wait().Is(230);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -86,7 +95,7 @@ namespace RuntimeUnitTestToolkit
             range.Scan(100, (x, y) => x + y).ToArrayWait().IsCollection(101, 103, 106, 110, 115);
             Observable.Empty<int>().Scan((x, y) => x + y).ToArrayWait().IsCollection();
             Observable.Empty<int>().Scan(100, (x, y) => x + y).ToArrayWait().IsCollection();
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -119,7 +128,7 @@ namespace RuntimeUnitTestToolkit
             subject.OnCompleted();
             record.Values[0].Is(100);
             record.Notifications.Last().Kind.Is(NotificationKind.OnCompleted);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -137,7 +146,7 @@ namespace RuntimeUnitTestToolkit
             Thread.Sleep(TimeSpan.FromMilliseconds(200));
             record.Values[0].Is(100);
             record.Notifications.Last().Kind.Is(NotificationKind.OnCompleted);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -162,7 +171,7 @@ namespace RuntimeUnitTestToolkit
         {
             SetScehdulerForImport();
             Observable.Range(1, 10).AsObservable().ToArrayWait().IsCollection(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -179,7 +188,7 @@ namespace RuntimeUnitTestToolkit
             done.IsFalse();
             subject.OnCompleted();
             done.IsTrue();
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -188,7 +197,7 @@ namespace RuntimeUnitTestToolkit
         {
             SetScehdulerForImport();
             Observable.Range(1, 3).AsUnitObservable().ToArrayWait().IsCollection(Unit.Default, Unit.Default, Unit.Default);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -197,7 +206,7 @@ namespace RuntimeUnitTestToolkit
         {
             SetScehdulerForImport();
             Observable.Range(1, 3).Cast<int, object>().ToArrayWait().IsCollection(1, 2, 3);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -213,7 +222,7 @@ namespace RuntimeUnitTestToolkit
             subject.OnNext("hogehoge");
             subject.OnNext(3);
             list.IsCollection(1, 2, 3);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -224,7 +233,7 @@ namespace RuntimeUnitTestToolkit
             Enumerable.Range(1, 3).ToObservable(Scheduler.CurrentThread).ToArrayWait().IsCollection(1, 2, 3);
             Enumerable.Range(1, 3).ToObservable(Scheduler.ThreadPool).ToArrayWait().IsCollection(1, 2, 3);
             Enumerable.Range(1, 3).ToObservable(Scheduler.Immediate).ToArrayWait().IsCollection(1, 2, 3);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -252,7 +261,7 @@ namespace RuntimeUnitTestToolkit
             bd.IsDisposed.IsFalse();
             bd.Dispose();
             bd.IsDisposed.IsTrue();
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -299,7 +308,7 @@ namespace RuntimeUnitTestToolkit
             d.Disposable = null;
             d.Dispose();
             d.Disposable = null;
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -350,7 +359,7 @@ namespace RuntimeUnitTestToolkit
             d.Disposable = null;
             d.Dispose();
             d.Disposable = null;
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -392,7 +401,7 @@ namespace RuntimeUnitTestToolkit
             d.Disposable = null;
             d.Dispose();
             d.Disposable = null;
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -425,7 +434,7 @@ namespace RuntimeUnitTestToolkit
             list.Clear();
             Observable.Range(1, 5).Concat(Observable.Throw<int>(new Exception())).Do(x => list.Add(x), ex => list.Add(100), () => list.Add(1000)).Subscribe(_ => { }, _ => { }, () => { });
             list.IsCollection(1, 2, 3, 4, 5, 100);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -442,7 +451,7 @@ namespace RuntimeUnitTestToolkit
             observer = new ListObserver();
             Observable.Range(1, 5).Concat(Observable.Throw<int>(new Exception())).Do(observer).Subscribe(_ => { }, _ => { }, () => { });
             observer.list.IsCollection(1, 2, 3, 4, 5, 100);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -474,7 +483,7 @@ namespace RuntimeUnitTestToolkit
                 .Subscribe();
             subscription.Dispose();
             list.IsCollection(5000, 10000);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -491,7 +500,7 @@ namespace RuntimeUnitTestToolkit
             list.Clear();
             Observable.Range(1, 5).Concat(Observable.Throw<int>(new Exception())).DoOnCompleted(() => list.Add(1000)).Subscribe(_ => { }, _ => { }, () => { });
             list.IsCollection();
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -508,7 +517,7 @@ namespace RuntimeUnitTestToolkit
             list.Clear();
             Observable.Range(1, 5).Concat(Observable.Throw<int>(new Exception())).DoOnError(_ => list.Add(100)).Subscribe(_ => { }, _ => { }, () => { });
             list.IsCollection(100);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -531,7 +540,7 @@ namespace RuntimeUnitTestToolkit
                 .Do(x => list.Add(x), ex => list.Add(100), () => list.Add(1000))
                 .DoOnSubscribe(() => list.Add(10000)).Subscribe(_ => { }, _ => { }, () => { });
             list.IsCollection(10000, 1, 2, 3, 4, 5, 100);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -548,7 +557,7 @@ namespace RuntimeUnitTestToolkit
             list.Clear();
             Observable.Range(1, 5).Concat(Observable.Throw<int>(new Exception())).DoOnTerminate(() => list.Add(1000)).Subscribe(_ => { }, _ => { }, () => { });
             list.IsCollection(1000);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -608,7 +617,7 @@ namespace RuntimeUnitTestToolkit
                 s1.OnNext(1000);
                 list.Count.Is(5);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -635,7 +644,7 @@ namespace RuntimeUnitTestToolkit
                 tester.Fire(1000);
                 list.Count.Is(5);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -681,7 +690,7 @@ namespace RuntimeUnitTestToolkit
                 tester.Fire(1000);
                 list.Count.Is(5);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -727,7 +736,7 @@ namespace RuntimeUnitTestToolkit
                 tester.Fire(1000);
                 list.Count.Is(5);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -758,7 +767,7 @@ namespace RuntimeUnitTestToolkit
                 })
                 .ToArrayWait();
             xs.IsCollection(2, 1, 2, 3);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -795,7 +804,7 @@ namespace RuntimeUnitTestToolkit
                 xs[1].Value.Is(99);
                 xs[2].Kind.Is(NotificationKind.OnError);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -818,7 +827,7 @@ namespace RuntimeUnitTestToolkit
             {
                 called.IsTrue();
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -873,7 +882,7 @@ namespace RuntimeUnitTestToolkit
             mc.Run();
             GetTailDynamic(mc).Is(0);
             coroutines.OrderBy(x => x.OriginalCount).Select(x => x.Count).IsCollection(-1, -1, -1, -1, -1);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -898,7 +907,7 @@ namespace RuntimeUnitTestToolkit
             mc.Run();
             GetTailDynamic(mc).Is(0);
             coroutines.OrderBy(x => x.OriginalCount).Select(x => x.Count).IsCollection(-1, -1, -1, -1, -1);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -937,7 +946,7 @@ namespace RuntimeUnitTestToolkit
             mc.Run();
             GetTailDynamic(mc).Is(0);
             coroutines.OrderBy(x => x.OriginalCount).Select(x => x.Count).IsCollection(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1028,7 +1037,7 @@ namespace RuntimeUnitTestToolkit
                     GetTailDynamic(mc).Is(0);
                 }
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1075,7 +1084,7 @@ namespace RuntimeUnitTestToolkit
             l[4].Value.Is(new { x = 5000, y = 500 });
             b.OnCompleted();
             l[5].Kind.Is(NotificationKind.OnCompleted);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1095,7 +1104,7 @@ namespace RuntimeUnitTestToolkit
             b.OnNext(30);
             l.Count.Is(1);
             l[0].Kind.Is(NotificationKind.OnCompleted);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1115,7 +1124,7 @@ namespace RuntimeUnitTestToolkit
             a.OnNext(30);
             l.Count.Is(1);
             l[0].Kind.Is(NotificationKind.OnCompleted);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1134,7 +1143,7 @@ namespace RuntimeUnitTestToolkit
             a.OnNext(30);
             l.Count.Is(1);
             l[0].Kind.Is(NotificationKind.OnCompleted);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1165,7 +1174,7 @@ namespace RuntimeUnitTestToolkit
             l[4].Value.Is(new { x = 5000, y = 500 });
             b.OnCompleted();
             l[5].Kind.Is(NotificationKind.OnCompleted);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1183,7 +1192,7 @@ namespace RuntimeUnitTestToolkit
             b.OnNext(30);
             l.Count.Is(1);
             l[0].Kind.Is(NotificationKind.OnCompleted);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1203,7 +1212,7 @@ namespace RuntimeUnitTestToolkit
             a.OnNext(30);
             l.Count.Is(1);
             l[0].Kind.Is(NotificationKind.OnCompleted);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1222,7 +1231,7 @@ namespace RuntimeUnitTestToolkit
             a.OnNext(30);
             l.Count.Is(1);
             l[0].Kind.Is(NotificationKind.OnCompleted);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1234,7 +1243,7 @@ namespace RuntimeUnitTestToolkit
             var b = Observable.Range(10, 3, Scheduler.ThreadPool);
             var c = Observable.Return(300, Scheduler.ThreadPool);
             Observable.Concat(a, b, c).ToArray().Wait().IsCollection(1, 2, 3, 4, 5, 10, 11, 12, 300);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1260,7 +1269,7 @@ namespace RuntimeUnitTestToolkit
             s1.OnCompleted();
             s3.OnCompleted();
             complete.IsTrue();
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1287,7 +1296,7 @@ namespace RuntimeUnitTestToolkit
             s1.OnCompleted();
             s3.OnCompleted();
             complete.IsTrue();
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1303,7 +1312,7 @@ namespace RuntimeUnitTestToolkit
             seq.StartWith(Scheduler.ThreadPool, 100).ToArray().Wait().IsCollection(100, 1, 2, 3, 4, 5);
             seq.StartWith(Scheduler.ThreadPool, 100, 1000, 10000).ToArray().Wait().IsCollection(100, 1000, 10000, 1, 2, 3, 4, 5);
             seq.StartWith(Scheduler.ThreadPool, Enumerable.Range(100, 3)).ToArray().Wait().IsCollection(100, 101, 102, 1, 2, 3, 4, 5);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1328,7 +1337,7 @@ namespace RuntimeUnitTestToolkit
             s2.OnNext(900000);
             list.IsCollection(100, 2000, 5000, 900000);
             s2.OnCompleted();
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1355,7 +1364,7 @@ namespace RuntimeUnitTestToolkit
             l[0].Value.x.Is(1500);
             l[0].Value.y.Is(5);
             l[1].Kind.Is(NotificationKind.OnCompleted);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1388,7 +1397,7 @@ namespace RuntimeUnitTestToolkit
                 new { x = 3, y = 10 });
             a.OnCompleted();
             record.Notifications.Last().Kind.Is(NotificationKind.OnCompleted);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1411,7 +1420,7 @@ namespace RuntimeUnitTestToolkit
             b.OnNext(5);
             l.Count.Is(2); // Completed!
             l[1].Kind.Is(NotificationKind.OnCompleted);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1432,7 +1441,7 @@ namespace RuntimeUnitTestToolkit
             b.OnCompleted(); // Completed!
             l.Count.Is(2); // Completed!
             l[1].Kind.Is(NotificationKind.OnCompleted);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1460,7 +1469,7 @@ namespace RuntimeUnitTestToolkit
             b.OnNext(5);
             l.Count.Is(3);
             l[2].Kind.Is(NotificationKind.OnCompleted);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1490,7 +1499,7 @@ namespace RuntimeUnitTestToolkit
             l.Count.Is(4);
             l[2].Value.Is(new { x = 9999, y = 5 });
             l[3].Kind.Is(NotificationKind.OnCompleted);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1510,7 +1519,7 @@ namespace RuntimeUnitTestToolkit
             b.OnNext(30);
             l.Count.Is(1);
             l[0].Kind.Is(NotificationKind.OnCompleted);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1533,7 +1542,7 @@ namespace RuntimeUnitTestToolkit
             l.Count.Is(2);
             b.OnNext(5);
             l[2].Kind.Is(NotificationKind.OnCompleted);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1558,7 +1567,7 @@ namespace RuntimeUnitTestToolkit
             b.OnNext(5);
             l[2].Value.Is(new { x = 900, y = 5 });
             l[3].Kind.Is(NotificationKind.OnCompleted);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1589,7 +1598,7 @@ namespace RuntimeUnitTestToolkit
             b.OnNext(200);
             record.Notifications.Count.Is(3);
             record.Notifications.Last().Kind.Is(NotificationKind.OnCompleted);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1612,7 +1621,7 @@ namespace RuntimeUnitTestToolkit
             b.OnNext(5);
             l.Count.Is(2); // Completed!
             l[1].Kind.Is(NotificationKind.OnCompleted);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1633,7 +1642,7 @@ namespace RuntimeUnitTestToolkit
             b.OnCompleted(); // Completed!
             l.Count.Is(2); // Completed!
             l[1].Kind.Is(NotificationKind.OnCompleted);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1658,7 +1667,7 @@ namespace RuntimeUnitTestToolkit
             c.OnCompleted();
             l.Count.Is(2); // Completed!
             l[1].Kind.Is(NotificationKind.OnCompleted);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1703,7 +1712,7 @@ namespace RuntimeUnitTestToolkit
             result[1].Is(5);
             result[2].Is(6);
             result[3].Is(7);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1729,7 +1738,7 @@ namespace RuntimeUnitTestToolkit
             result[1].Is(1);
             result[2].Is(2);
             result[3].Is(3);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1750,7 +1759,7 @@ namespace RuntimeUnitTestToolkit
             s.ObserveOn(Scheduler.Immediate).Materialize().Subscribe(list.Add);
             s.OnCompleted();
             list[1].Kind.Is(NotificationKind.OnCompleted);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1879,7 +1888,7 @@ namespace RuntimeUnitTestToolkit
                 test.Fire(6);
                 isRaised.IsFalse();
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1927,7 +1936,7 @@ namespace RuntimeUnitTestToolkit
                 test.Fire(3);
                 isRaised.IsFalse();
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1953,7 +1962,7 @@ namespace RuntimeUnitTestToolkit
             SetScehdulerForImport();
             var material = Observable.Empty<Unit>().Materialize().ToArray().Wait();
             material.IsCollection(Notification.CreateOnCompleted<Unit>());
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1963,7 +1972,7 @@ namespace RuntimeUnitTestToolkit
             SetScehdulerForImport();
             AssertEx.Catch<TimeoutException>(() =>
                 Observable.Never<Unit>().Materialize().ToArray().Wait(TimeSpan.FromMilliseconds(10)));
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1984,7 +1993,7 @@ namespace RuntimeUnitTestToolkit
                 r.Record().Values[0].Is(i);
                 r.GetType().FullName.Contains("ImmediateReturnObservable").IsTrue();
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -1993,7 +2002,7 @@ namespace RuntimeUnitTestToolkit
         {
             SetScehdulerForImport();
             Observable.Range(1, 5).ToArray().Wait().IsCollection(1, 2, 3, 4, 5);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2009,7 +2018,7 @@ namespace RuntimeUnitTestToolkit
                 .Wait();
             xs.IsCollection(1, 2, 3, 100, 1, 2, 3, 100, 1, 2);
             Observable.Repeat(100).Take(5).ToArray().Wait().IsCollection(100, 100, 100, 100, 100);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2018,7 +2027,7 @@ namespace RuntimeUnitTestToolkit
         {
             SetScehdulerForImport();
             Observable.Repeat("a", 5, Scheduler.Immediate).ToArrayWait().IsCollection("a", "a", "a", "a", "a");
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2028,7 +2037,7 @@ namespace RuntimeUnitTestToolkit
             SetScehdulerForImport();
             var xss = Observable.Repeat(5, 3).ToArray().Wait();
             xss.IsCollection(5, 5, 5);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2037,7 +2046,7 @@ namespace RuntimeUnitTestToolkit
         {
             SetScehdulerForImport();
             Observable.Return(100).Materialize().ToArray().Wait().IsCollection(Notification.CreateOnNext(100), Notification.CreateOnCompleted<int>());
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2047,7 +2056,7 @@ namespace RuntimeUnitTestToolkit
             SetScehdulerForImport();
             var ex = new Exception();
             Observable.Throw<string>(ex).Materialize().ToArray().Wait().IsCollection(Notification.CreateOnError<string>(ex));
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2085,7 +2094,7 @@ namespace RuntimeUnitTestToolkit
                     "DO:20000", "x:11011 y:20000"
                     );
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2117,7 +2126,7 @@ namespace RuntimeUnitTestToolkit
             xs[1].IsCollection(4, 5, 6);
             xs[2].IsCollection(7, 8, 9);
             xs[3].IsCollection(10);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2130,7 +2139,7 @@ namespace RuntimeUnitTestToolkit
                 .ToArray()
                 .Wait();
             xs.Length.Is(0);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2144,7 +2153,7 @@ namespace RuntimeUnitTestToolkit
                 .Wait();
             xs.Length.Is(1);
             xs[0].IsCollection(1, 2);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2157,7 +2166,7 @@ namespace RuntimeUnitTestToolkit
                 .ToArray()
                 .Wait();
             xs.Length.Is(0);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2201,7 +2210,7 @@ namespace RuntimeUnitTestToolkit
                 xs[2].IsCollection(11, 12, 13);
                 xs[3].IsCollection(16, 17, 18);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2217,7 +2226,7 @@ namespace RuntimeUnitTestToolkit
                 .Wait();
             xs[0].IsCollection(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
             xs[1].IsCollection(1000);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2276,7 +2285,7 @@ namespace RuntimeUnitTestToolkit
                 result[1].xs.IsCollection(1000);
                 result[1].currentSpan.Is(x => TimeSpan.FromMilliseconds(4800) <= x && x <= TimeSpan.FromMilliseconds(5200));
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2288,7 +2297,7 @@ namespace RuntimeUnitTestToolkit
             var record = subject.Buffer(TimeSpan.FromMilliseconds(100), 100).Take(5).Record();
             Thread.Sleep(TimeSpan.FromSeconds(2));
             record.Values.Count.Is(5);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2305,7 +2314,7 @@ namespace RuntimeUnitTestToolkit
             xs.Length.Is(2);
             xs[0].Count.Is(1);
             xs[1].Count.Is(0);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2322,7 +2331,7 @@ namespace RuntimeUnitTestToolkit
             xs[1].Count.Is(0); // 2sec
             xs[2].Count.Is(0); // 3sec
             xs[3].Count.Is(1); // 4sec
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2335,7 +2344,7 @@ namespace RuntimeUnitTestToolkit
                 .ToArray()
                 .Wait();
             xs.Length.Is(1);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2355,7 +2364,7 @@ namespace RuntimeUnitTestToolkit
             boundaries.OnNext(0);
             record.Values.Count.Is(2);
             record.Values[1].Count.Is(0);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2412,7 +2421,7 @@ namespace RuntimeUnitTestToolkit
                 s.OnCompleted();
                 l[0].Kind.Is(NotificationKind.OnError);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2470,7 +2479,7 @@ namespace RuntimeUnitTestToolkit
                 s.OnError(new Exception());
                 l[0].Kind.Is(NotificationKind.OnError);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2507,7 +2516,7 @@ namespace RuntimeUnitTestToolkit
             a.Values.IsCollection(99, 0);
             b.Values.IsCollection(100, 1);
             c.Values.IsCollection(101, 2);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2572,7 +2581,7 @@ namespace RuntimeUnitTestToolkit
                 s.OnCompleted();
                 l[0].Kind.Is(NotificationKind.OnError);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2638,7 +2647,7 @@ namespace RuntimeUnitTestToolkit
                 s.OnError(new Exception());
                 l[0].Kind.Is(NotificationKind.OnError);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2648,7 +2657,7 @@ namespace RuntimeUnitTestToolkit
             SetScehdulerForImport();
             var xs = Observable.Range(1, 5).Pairwise((x, y) => x + ":" + y).ToArrayWait();
             xs.IsCollection("1:2", "2:3", "3:4", "4:5");
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2661,7 +2670,7 @@ namespace RuntimeUnitTestToolkit
             xs[1].Previous.Is(2); xs[1].Current.Is(3);
             xs[2].Previous.Is(3); xs[2].Current.Is(4);
             xs[3].Previous.Is(4); xs[3].Current.Is(5);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2746,7 +2755,7 @@ namespace RuntimeUnitTestToolkit
                 s.OnCompleted();
                 l[0].Kind.Is(NotificationKind.OnError);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2842,7 +2851,7 @@ namespace RuntimeUnitTestToolkit
                 l[0].Value.Is(0);
                 l[1].Kind.Is(NotificationKind.OnCompleted);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2862,7 +2871,7 @@ namespace RuntimeUnitTestToolkit
                 range.Skip(3).ToArrayWait().IsCollection(4, 5, 6, 7, 8, 9, 10);
                 range.Skip(3).Skip(2).ToArrayWait().IsCollection(6, 7, 8, 9, 10);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2890,7 +2899,7 @@ namespace RuntimeUnitTestToolkit
                     .Wait();
                 (v.Timestamp - now).Is(x => (TimeSpan.FromMilliseconds(250) <= x && x <= TimeSpan.FromMilliseconds(350)));
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2926,7 +2935,7 @@ namespace RuntimeUnitTestToolkit
                 a.OnNext(100);
                 l.Count.Is(0);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2939,7 +2948,7 @@ namespace RuntimeUnitTestToolkit
                 .ToArray()
                 .Wait()
                 .IsCollection(6, 7, 8, 9, 10);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2952,7 +2961,7 @@ namespace RuntimeUnitTestToolkit
                 .ToArray()
                 .Wait()
                 .IsCollection(7, 8, 9, 10);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2970,7 +2979,7 @@ namespace RuntimeUnitTestToolkit
             record.Values.IsCollection(8, 9, 10);
             record = Observable.Empty<int>().TakeLast(3).Record();
             record.Notifications[0].Kind.Is(NotificationKind.OnCompleted);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -2988,7 +2997,7 @@ namespace RuntimeUnitTestToolkit
                 .TakeLast(TimeSpan.FromMilliseconds(250))
                 .ToArrayWait();
             data.IsCollection(3, 4);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3026,7 +3035,7 @@ namespace RuntimeUnitTestToolkit
                 l[1].Value.Is(10);
                 l[2].Value.Is(100);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3039,7 +3048,7 @@ namespace RuntimeUnitTestToolkit
                 .ToArray()
                 .Wait()
                 .IsCollection(1, 2, 3, 4, 5);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3065,7 +3074,7 @@ namespace RuntimeUnitTestToolkit
             SetScehdulerForImport();
             Observable.Range(1, 3).DefaultIfEmpty(-1).ToArrayWait().IsCollection(1, 2, 3);
             Observable.Empty<int>().DefaultIfEmpty(-1).ToArrayWait().IsCollection(-1);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3082,7 +3091,7 @@ namespace RuntimeUnitTestToolkit
                 .Dematerialize()
                 .Subscribe(x => l.Add(x), ex => l.Add(1000), () => l.Add(10000));
             l.IsCollection(1, 2, 3, 1000);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3107,7 +3116,7 @@ namespace RuntimeUnitTestToolkit
                 subject.OnCompleted();
                 array.IsCollection(1, 10, 100, 5, 70, 7);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3140,7 +3149,7 @@ namespace RuntimeUnitTestToolkit
                 subject.OnCompleted();
                 array.IsCollection(1, 10, 1, 100, 5);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3168,7 +3177,7 @@ namespace RuntimeUnitTestToolkit
                 xs.Length.Is(1);
                 xs[0].Is(Unit.Default);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3178,7 +3187,7 @@ namespace RuntimeUnitTestToolkit
             SetScehdulerForImport();
             var xs = Observable.Range(1, 10).IgnoreElements().Materialize().ToArrayWait();
             xs[0].Kind.Is(NotificationKind.OnCompleted);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3198,7 +3207,7 @@ namespace RuntimeUnitTestToolkit
             m[1].Value.Is(2);
             m[2].Value.Is(3);
             m[3].Kind.Is(NotificationKind.OnError);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3250,7 +3259,7 @@ namespace RuntimeUnitTestToolkit
                 list.Count.Is(3);
                 list.IsCollection(0, 2000, 6000);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3267,7 +3276,7 @@ namespace RuntimeUnitTestToolkit
             b.OnNext(100);
             list.Count.Is(1);
             list[0].Is(100);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3283,7 +3292,7 @@ namespace RuntimeUnitTestToolkit
             subject.OnNext(100);
             subject.OnCompleted();
             array.IsCollection(1, 10, 100);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3300,7 +3309,7 @@ namespace RuntimeUnitTestToolkit
             disp.Dispose();
             subject.OnCompleted();
             array.IsNull();
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3318,7 +3327,7 @@ namespace RuntimeUnitTestToolkit
             });
             subject.Wait().Is(100);
 #endif
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3374,7 +3383,7 @@ namespace RuntimeUnitTestToolkit
                 a.OnCompleted();
                 list.IsCollection(5);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3410,7 +3419,7 @@ namespace RuntimeUnitTestToolkit
             (now.AddMilliseconds(800) <= xs[1].Timestamp && xs[1].Timestamp <= now.AddMilliseconds(1200)).IsTrue();
             xs[2].Value.Is(3);
             (now.AddMilliseconds(800) <= xs[2].Timestamp && xs[2].Timestamp <= now.AddMilliseconds(1200)).IsTrue();
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3429,7 +3438,7 @@ namespace RuntimeUnitTestToolkit
             xs[1].Value.Is(4);
             xs[2].Value.Is(7);
             xs[3].Value.Is(9);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3458,7 +3467,7 @@ namespace RuntimeUnitTestToolkit
             xs[1].Value.Value.Is(5);
             xs[2].Value.Value.Is(8);
             xs[3].Kind.Is(NotificationKind.OnCompleted);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3485,7 +3494,7 @@ namespace RuntimeUnitTestToolkit
             xs[0].Value.Value.Is(5);
             xs[1].Value.Value.Is(8);
             xs[2].Kind.Is(NotificationKind.OnCompleted);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3507,7 +3516,7 @@ namespace RuntimeUnitTestToolkit
             xs[2].Value.Is(3); xs[2].Interval.TotalSeconds.Is(x => 0.9 <= x && x <= 1.1);
             xs[3].Value.Is(4); xs[3].Interval.TotalSeconds.Is(x => 0.3 <= x && x <= 0.5);
             xs[4].Value.Is(5); xs[4].Interval.TotalSeconds.Is(x => 0.15 <= x && x <= 0.25);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3528,7 +3537,7 @@ namespace RuntimeUnitTestToolkit
             xs.Length.Is(2);
             xs[0].Value.Value.Is(1);
             xs[1].Exception.IsInstanceOf<TimeoutException>();
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3551,7 +3560,7 @@ namespace RuntimeUnitTestToolkit
             xs[0].Value.Value.Is(1);
             xs[1].Value.Value.Is(5);
             xs[2].Exception.IsInstanceOf<TimeoutException>();
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3623,7 +3632,7 @@ namespace RuntimeUnitTestToolkit
                 xs[1].Is(3);
                 xs[2].Is(4);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3646,7 +3655,7 @@ namespace RuntimeUnitTestToolkit
             xs[2].Value.Is(3); (now - xs[2].Timestamp).TotalSeconds.Is(x => 0.5 <= x && x <= 0.8);
             xs[3].Value.Is(4); (now - xs[3].Timestamp).TotalSeconds.Is(x => 0.18 <= x && x <= 0.3);
             xs[4].Value.Is(5); (now - xs[4].Timestamp).TotalSeconds.Is(x => 0 <= x && x <= 0.1);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3670,7 +3679,7 @@ namespace RuntimeUnitTestToolkit
         public void Enq()
         {
             SetScehdulerForImport();
-            var q = new UniRx.InternalUtil.ThreadSafeQueueWorker();
+            var q = new ThreadSafeQueueWorker();
             var l = new List<int>();
             q.Enqueue(x => l.Add((int)x), 1);
             q.Enqueue(x => q.Enqueue(_ => l.Add((int)x), null), -1);
@@ -3734,7 +3743,7 @@ namespace RuntimeUnitTestToolkit
             l.Clear();
             q.ExecuteAll(ex => { });
             l.Count.Is(0);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3763,7 +3772,7 @@ namespace RuntimeUnitTestToolkit
             Observable.Range(1, 10).ToArray().Wait().IsCollection(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
             Observable.Range(1, 0, Scheduler.Immediate).ToArray().Wait().Length.Is(0);
             Observable.Range(1, 10, Scheduler.Immediate).ToArray().Wait().IsCollection(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3815,7 +3824,7 @@ namespace RuntimeUnitTestToolkit
                 rp.Value = null;
                 result.Values.IsCollection("z", "a", "b", null);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3862,7 +3871,7 @@ namespace RuntimeUnitTestToolkit
                     rxProp.Record().Notifications[0].Kind.Is(NotificationKind.OnError);
                 }
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3904,7 +3913,7 @@ namespace RuntimeUnitTestToolkit
                     rxProp.Record().Notifications[0].Kind.Is(NotificationKind.OnError);
                 }
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -3976,7 +3985,7 @@ namespace RuntimeUnitTestToolkit
                 source.OnNext(null);
                 result.Values.IsCollection("z", "z", "a", "b", "b", null, null);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -4040,7 +4049,7 @@ namespace RuntimeUnitTestToolkit
                 source.OnNext(100);
                 result.Values.IsCollection(0, 0, 10, 100, 100);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -4074,7 +4083,7 @@ namespace RuntimeUnitTestToolkit
                 rp.Value = 100;
                 result.Values.IsCollection(20, 0, 10, 100);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -4086,7 +4095,7 @@ namespace RuntimeUnitTestToolkit
             rp1.Last().Record().Notifications.IsCollection(
                 Notification.CreateOnNext("1"),
                 Notification.CreateOnCompleted<string>());
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -4112,7 +4121,7 @@ namespace RuntimeUnitTestToolkit
             SetScehdulerForImport();
             var hoge = ScheduleTasks(Scheduler.CurrentThread);
             hoge.IsCollection("outer start.", "outer end.", "--innerAction start.", "--innerAction end.", "----leafAction.");
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -4135,7 +4144,7 @@ namespace RuntimeUnitTestToolkit
                 });
             });
             list.IsCollection("one", "after 1", "after 3");
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -4159,7 +4168,7 @@ namespace RuntimeUnitTestToolkit
                 });
             });
             list.IsCollection("one", "after 1");
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -4169,7 +4178,7 @@ namespace RuntimeUnitTestToolkit
             SetScehdulerForImport();
             var hoge = ScheduleTasks(Scheduler.Immediate);
             hoge.IsCollection("outer start.", "--innerAction start.", "----leafAction.", "--innerAction end.", "outer end.");
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -4253,7 +4262,7 @@ namespace RuntimeUnitTestToolkit
                 // check
                 list.IsCollection("OnNext((10, 200))", "OnNext((100, 300))", "OnError(System.Exception)");
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -4287,7 +4296,7 @@ namespace RuntimeUnitTestToolkit
                 // check
                 list.IsCollection("OnNext((10, 1))", "OnNext((10, 2))", "OnNext((10, 3))", "OnNext((100, 10))", "OnNext((100, 10))", "OnNext((100, 10))", "OnError(System.Exception)");
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -4321,7 +4330,7 @@ namespace RuntimeUnitTestToolkit
                 // check
                 list.IsCollection("OnNext((10, 0, 0, 0))", "OnNext((10, 0, 1, 1))", "OnNext((10, 0, 2, 2))", "OnNext((100, 1, 1, 0))", "OnNext((100, 1, 1, 1))", "OnNext((100, 1, 1, 2))", "OnError(System.Exception)");
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -4389,7 +4398,7 @@ namespace RuntimeUnitTestToolkit
                 // check
                 list.IsCollection("OnNext((10, 0, 200, 0, 0))", "OnNext((100, 1, 300, 1, 0))", "OnError(System.Exception)");
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -4477,7 +4486,7 @@ namespace RuntimeUnitTestToolkit
                 a.OnCompleted();
                 list.IsCollection("OnNext(200)", "OnNext(300)", "OnCompleted()");
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -4511,7 +4520,7 @@ namespace RuntimeUnitTestToolkit
                 // check
                 list.IsCollection("OnNext(1)", "OnNext(2)", "OnNext(3)", "OnNext(10)", "OnNext(10)", "OnNext(10)", "OnError(System.Exception)");
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -4545,7 +4554,7 @@ namespace RuntimeUnitTestToolkit
                 // check
                 list.IsCollection("OnNext(0)", "OnNext(1)", "OnNext(2)", "OnNext(1)", "OnNext(1)", "OnNext(1)", "OnError(System.Exception)");
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -4613,7 +4622,7 @@ namespace RuntimeUnitTestToolkit
                 // check
                 list.IsCollection("OnNext((200, 0))", "OnNext((300, 1))", "OnError(System.Exception)");
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -4641,7 +4650,7 @@ namespace RuntimeUnitTestToolkit
             //var selectselect = Observable.Range(1, 10)
             //    .Select(x => x)
             //    .Select(x => x * -1);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -4659,7 +4668,7 @@ namespace RuntimeUnitTestToolkit
                 .Where(x => x % 2 == 0);
             selectWhere2.GetType().Name.Contains("SelectWhere").IsFalse();
             selectWhere2.ToArrayWait().IsCollection(4, 16, 36, 64, 100);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -4677,7 +4686,7 @@ namespace RuntimeUnitTestToolkit
                 .Select(x => x * x);
             whereSelect2.GetType().Name.Contains("WhereSelect").IsFalse();
             whereSelect2.ToArrayWait().IsCollection(4, 16, 36, 64, 100);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -4693,7 +4702,7 @@ namespace RuntimeUnitTestToolkit
                 .Where((x, i) => x % 2 == 0)
                 .Where(x => x > 5);
             wherewhere2.ToArrayWait().IsCollection(6, 8, 10);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -4774,7 +4783,7 @@ namespace RuntimeUnitTestToolkit
                 exception.Count.Is(2);
                 onCompletedCallCount.Is(0);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -4849,7 +4858,7 @@ namespace RuntimeUnitTestToolkit
                 exception.Count.Is(1);
                 onCompletedCallCount.Is(0);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -4923,7 +4932,7 @@ namespace RuntimeUnitTestToolkit
                 exception.Count.Is(1);
                 onCompletedCallCount.Is(0);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -4962,7 +4971,7 @@ namespace RuntimeUnitTestToolkit
             onNext.Clear();
             subject.Subscribe(x => onNext.Add(x), x => exception.Add(x), () => onCompletedCallCount++);
             onNext.IsCollection(10000, 2, 20);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -5031,7 +5040,7 @@ namespace RuntimeUnitTestToolkit
                 exception.Count.Is(1);
                 onCompletedCallCount.Is(0);
             }
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -5089,7 +5098,7 @@ namespace RuntimeUnitTestToolkit
             AssertEx.Throws<ObjectDisposedException>(() => subject.OnNext(0));
             AssertEx.Throws<ObjectDisposedException>(() => subject.OnError(new Exception()));
             AssertEx.Throws<ObjectDisposedException>(() => subject.OnCompleted());
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -5118,7 +5127,7 @@ namespace RuntimeUnitTestToolkit
             range.Take(0).ToArray().Wait().Length.Is(0);
             range.Take(3).ToArrayWait().IsCollection(1, 2, 3);
             range.Take(15).ToArrayWait().IsCollection(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -5145,7 +5154,7 @@ namespace RuntimeUnitTestToolkit
             Observable.Empty<int>().ToArray().Wait().IsCollection();
             Observable.Return(10).ToArray().Wait().IsCollection(10);
             Observable.Range(1, 10).ToArray().Wait().IsCollection(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -5156,7 +5165,7 @@ namespace RuntimeUnitTestToolkit
             Observable.Empty<int>().ToList().Wait().IsCollection();
             Observable.Return(10).ToList().Wait().IsCollection(10);
             Observable.Range(1, 10).ToList().Wait().IsCollection(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -5186,7 +5195,7 @@ namespace RuntimeUnitTestToolkit
                     Observable.Range(1, 4))
                 .Wait();
             xs.IsCollection(100, 5, 4);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -5198,7 +5207,7 @@ namespace RuntimeUnitTestToolkit
             xs.Length.Is(0);
             var xs2 = Observable.WhenAll(Enumerable.Empty<IObservable<int>>().Select(x => x)).Wait();
             xs2.Length.Is(0);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -5212,7 +5221,7 @@ namespace RuntimeUnitTestToolkit
                     Observable.Range(1, 4)
             }.Select(x => x).WhenAll().Wait();
             xs.IsCollection(100, 5, 4);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -5226,7 +5235,7 @@ namespace RuntimeUnitTestToolkit
                     Observable.Range(1, 4).AsUnitObservable())
                 .Wait();
             xs.Is(Unit.Default);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -5238,7 +5247,7 @@ namespace RuntimeUnitTestToolkit
             xs.Is(Unit.Default);
             var xs2 = Observable.WhenAll(Enumerable.Empty<IObservable<Unit>>().Select(x => x)).Wait();
             xs2.Is(Unit.Default);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 
@@ -5252,7 +5261,7 @@ namespace RuntimeUnitTestToolkit
                     Observable.Range(1, 4).AsUnitObservable()
             }.Select(x => x).WhenAll().Wait();
             xs.Is(Unit.Default);
-            UniRx.Scheduler.SetDefaultForUnity();
+            Scheduler.SetDefaultForUnity();
         }
 
 

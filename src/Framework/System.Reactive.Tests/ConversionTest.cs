@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using System.Reactive.Schedulers;
 using System.Reactive.Subjects;
 using System.Reactive.Tests.Tools;
+using System.Reactive.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AssertEx = System.Reactive.Tests.Tools.AssertEx;
 

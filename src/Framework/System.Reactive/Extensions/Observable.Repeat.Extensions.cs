@@ -1,8 +1,9 @@
-﻿using System.Reactive.Operators;
+﻿using System.Reactive.Linq;
+using System.Reactive.Operators;
 
-namespace System.Reactive.Linq
+namespace System.Reactive.Extensions
 {
-    public static class ObservableRepeatExtensions
+    public static partial class ObservableExtensions
     {
         /// <summary>
         /// Same as Repeat() but if arriving contiguous "OnComplete" Repeat stops.

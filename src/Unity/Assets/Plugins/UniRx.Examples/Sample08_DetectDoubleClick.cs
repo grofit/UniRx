@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Unity;
-using System.Text;
+using System.Reactive;
+using System.Reactive.Extensions;
+using System.Reactive.Unity.Linq;
 using UnityEngine;
 
 namespace UniRx.Examples

@@ -3,7 +3,7 @@
     // Scheduler Extension
     public partial class Scheduler
     {
-        private Scheduler() { }
+        protected Scheduler() { }
 
         // configurable defaults
         public static class DefaultSchedulers
@@ -47,12 +47,8 @@
             {
                 get
                 {
-#if WEB_GL
                     // WebGL does not support threadpool
-                    return asyncConversions ?? (asyncConversions = Scheduler.MainThread);
-#else
-                    return asyncConversions ?? (asyncConversions = Scheduler.ThreadPool);
-#endif
+                    return asyncConversions ?? (asyncConversions =Scheduler.ThreadPool);
                 }
                 set
                 {

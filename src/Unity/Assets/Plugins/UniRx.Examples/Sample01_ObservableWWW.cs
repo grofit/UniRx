@@ -1,6 +1,10 @@
 ﻿#if !(UNITY_METRO || UNITY_WP8)
 
+using System.Reactive;
+using System.Reactive.Extensions;
+using System.Reactive.Notifiers;
 using System.Reactive.Unity;
+using System.Reactive.Unity.Linq;
 using UnityEngine;
 
 namespace UniRx.Examples

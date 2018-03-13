@@ -1,15 +1,8 @@
 ﻿#if !(UNITY_4_5 || UNITY_4_6 || UNITY_4_7 || UNITY_5_0 || UNITY_5_1 || UNITY_5_2)
 
-using UnityEngine;
 using RuntimeUnitTestToolkit;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Unity;
-using System.Text;
-using UnityEngine.UI;
-using UnityEngine.Scripting;
+using System.Reactive;
+using System.Reactive.Extensions;
 
 namespace UniRx.Tests
 {

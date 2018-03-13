@@ -333,8 +333,12 @@
     <Compile Include="Assets\Plugins\System.Reactive.Unity\InspectorDisplayDrawer.cs" />
     <Compile Include="Assets\Plugins\System.Reactive.Unity\LazyTask.cs" />
     <Compile Include="Assets\Plugins\System.Reactive.Unity\LifetimeDisposableExtensions.cs" />
-    <Compile Include="Assets\Plugins\System.Reactive.Unity\Linq\EnumeratorExtensions.cs" />
+    <Compile Include="Assets\Plugins\System.Reactive.Unity\Extensions\EnumeratorExtensions.cs" />
+    <Compile Include="Assets\Plugins\System.Reactive.Unity\Extensions\UnityEventExtensions.cs" />
+    <Compile Include="Assets\Plugins\System.Reactive.Unity\Extensions\UnityGraphicExtensions.cs" />
+    <Compile Include="Assets\Plugins\System.Reactive.Unity\Extensions\UnityUIComponentExtensions.cs" />
     <Compile Include="Assets\Plugins\System.Reactive.Unity\Linq\ObservableExtensions.cs" />
+    <Compile Include="Assets\Plugins\System.Reactive.Unity\Linq\ObservableLinqExtensions.cs" />
     <Compile Include="Assets\Plugins\System.Reactive.Unity\Schedulers\MainThreadDispatcher.cs" />
     <Compile Include="Assets\Plugins\System.Reactive.Unity\Schedulers\MainThreadScheduler.cs" />
     <Compile Include="Assets\Plugins\System.Reactive.Unity\Linq\Observable.cs" />
@@ -400,9 +404,6 @@
     <Compile Include="Assets\Plugins\System.Reactive.Unity\TypedMonoBehaviour.cs" />
     <Compile Include="Assets\Plugins\System.Reactive.Unity\UniRxSynchronizationContext.cs" />
     <Compile Include="Assets\Plugins\System.Reactive.Unity\UnityEqualityComparer.cs" />
-    <Compile Include="Assets\Plugins\System.Reactive.Unity\UnityEventExtensions.cs" />
-    <Compile Include="Assets\Plugins\System.Reactive.Unity\UnityGraphicExtensions.cs" />
-    <Compile Include="Assets\Plugins\System.Reactive.Unity\UnityUIComponentExtensions.cs" />
     <Compile Include="Assets\Plugins\System.Reactive.Unity\YieldInstructionCache.cs" />
     <Compile Include="Assets\Plugins\UniRx.Examples\Sample01_ObservableWWW.cs" />
     <Compile Include="Assets\Plugins\UniRx.Examples\Sample02_ObservableTriggers.cs" />
@@ -412,12 +413,12 @@
     <Compile Include="Assets\Plugins\UniRx.Examples\Sample06_ConvertToCoroutine.cs" />
     <Compile Include="Assets\Plugins\UniRx.Examples\Sample07_OrchestratIEnumerator.cs" />
     <Compile Include="Assets\Plugins\UniRx.Examples\Sample08_DetectDoubleClick.cs" />
-    <Compile Include="Assets\Plugins\UniRx.Examples\Sample09_EventHandling.cs" />
     <Compile Include="Assets\Plugins\UniRx.Examples\Sample10_MainThreadDispatcher.cs" />
     <Compile Include="Assets\Plugins\UniRx.Examples\Sample11_Logger.cs" />
     <Compile Include="Assets\Plugins\UniRx.Examples\Sample12_ReactiveProperty.cs" />
     <Compile Include="Assets\Plugins\UniRx.Examples\Sample13_ToDoApp.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
 </Project>

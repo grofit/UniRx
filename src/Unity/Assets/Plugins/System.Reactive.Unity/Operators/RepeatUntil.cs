@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Reactive.Operators;
 using System.Reactive.Schedulers;
+using System.Reactive.Unity.Schedulers;
 using UnityEngine;
+using Scheduler = System.Reactive.Schedulers.Scheduler;
 
 namespace System.Reactive.Unity.Operators
 {

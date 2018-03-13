@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Reactive.Extensions;
 using System.Reactive.Linq;
 using System.Reactive.Unity.Operators;
 using System.Threading;
@@ -9,7 +10,7 @@ using System.Reactive.Unity.Schedulers;
 
 namespace System.Reactive.Unity.Linq
 {
-    public partial class Observable : System.Reactive.Linq.Observable
+    public partial class Observable : Reactive.Linq.Observable
     {
         readonly static HashSet<Type> YieldInstructionTypes = new HashSet<Type>
         {
@@ -601,6 +602,11 @@ namespace System.Reactive.Unity.Linq
             return new ObservableYieldInstruction<T>(source, throwOnError, CancellationToken.None);
         }
 
+        public static IObservable<Unit> ToObservable(IEnumerator coroutine, bool publishEveryYield = false)
+        {
+            return FromCoroutine<Unit>((observer, cancellationToken) => WrapEnumerator(coroutine, observer, cancellationToken, publishEveryYield));
+        }
+
         /// <summary>
         /// Convert to yieldable IEnumerator. e.g. yield return source.ToYieldInstruction();.
         /// If needs last result, you can take ObservableYieldInstruction.HasResult/Result property.
@@ -610,7 +616,27 @@ namespace System.Reactive.Unity.Linq
         {
             return new ObservableYieldInstruction<T>(source, throwOnError, cancel);
         }
-        
+
+        public static ObservableYieldInstruction<Unit> ToYieldInstruction(IEnumerator coroutine)
+        {
+            return Observable.ToObservable(coroutine, false).ToYieldInstruction();
+        }
+
+        public static ObservableYieldInstruction<Unit> ToYieldInstruction(IEnumerator coroutine, bool throwOnError)
+        {
+            return Observable.ToObservable(coroutine, false).ToYieldInstruction(throwOnError);
+        }
+
+        public static ObservableYieldInstruction<Unit> ToYieldInstruction(IEnumerator coroutine, CancellationToken cancellationToken)
+        {
+            return Observable.ToObservable(coroutine, false).ToYieldInstruction(cancellationToken);
+        }
+
+        public static ObservableYieldInstruction<Unit> ToYieldInstruction(IEnumerator coroutine, bool throwOnError, CancellationToken cancellationToken)
+        {
+            return Observable.ToObservable(coroutine, false).ToYieldInstruction(throwOnError, cancellationToken);
+        }
+
         /// <summary>Convert to awaitable IEnumerator.</summary>
         public static IEnumerator ToAwaitableEnumerator<T>(IObservable<T> source, CancellationToken cancel = default(CancellationToken))
         {

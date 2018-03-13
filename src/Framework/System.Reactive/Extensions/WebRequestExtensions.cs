@@ -4,7 +4,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading;
 
-namespace System.Reactive.Asynchronous
+namespace System.Reactive.Extensions
 {
     public static class WebRequestExtensions
     {

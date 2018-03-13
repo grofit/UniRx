@@ -1,11 +1,9 @@
-﻿// for uGUI(from 4.6)
-#if !(UNITY_4_0 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3 || UNITY_4_4 || UNITY_4_5)
-
+﻿using System.Reactive.Unity.Linq;
 using UnityEngine.Events;
 
-namespace System.Reactive.Unity
+namespace System.Reactive.Unity.Extensions
 {
-    public static partial class UnityEventExtensions
+    public static class UnityEventExtensions
     {
         public static IObservable<Unit> AsObservable(this UnityEngine.Events.UnityEvent unityEvent)
         {
@@ -25,7 +23,7 @@ namespace System.Reactive.Unity
                 {
                     h(Tuple.Create(t0, t1));
                 });
-            }, h => unityEvent.AddListener(h), h => unityEvent.RemoveListener(h));
+            }, unityEvent.AddListener, unityEvent.RemoveListener);
         }
 
         public static IObservable<Tuple<T0, T1, T2>> AsObservable<T0, T1, T2>(this UnityEngine.Events.UnityEvent<T0, T1, T2> unityEvent)
@@ -36,7 +34,7 @@ namespace System.Reactive.Unity
                 {
                     h(Tuple.Create(t0, t1, t2));
                 });
-            }, h => unityEvent.AddListener(h), h => unityEvent.RemoveListener(h));
+            }, unityEvent.AddListener, unityEvent.RemoveListener);
         }
 
         public static IObservable<Tuple<T0, T1, T2, T3>> AsObservable<T0, T1, T2, T3>(this UnityEngine.Events.UnityEvent<T0, T1, T2, T3> unityEvent)
@@ -47,9 +45,7 @@ namespace System.Reactive.Unity
                 {
                     h(Tuple.Create(t0, t1, t2, t3));
                 });
-            }, h => unityEvent.AddListener(h), h => unityEvent.RemoveListener(h));
+            }, unityEvent.AddListener, unityEvent.RemoveListener);
         }
     }
 }
-
-#endif

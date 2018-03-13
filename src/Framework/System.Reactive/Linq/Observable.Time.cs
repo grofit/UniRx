@@ -1,4 +1,5 @@
-﻿using System.Reactive.Operators;
+﻿using System.Reactive.Extensions;
+using System.Reactive.Operators;
 using System.Reactive.Schedulers;
 
 namespace System.Reactive.Linq

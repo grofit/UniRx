@@ -1,5 +1,8 @@
 ﻿#if !(UNITY_IPHONE || UNITY_ANDROID || UNITY_METRO)
 
+using System.Reactive;
+using System.Reactive.Extensions;
+using System.Reactive.Unity.Linq;
 using System.Reactive.Unity.Triggers;
 using UnityEngine;
 

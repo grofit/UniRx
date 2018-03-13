@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reactive.Extensions;
 using System.Reactive.Operators;
 using System.Reactive.Schedulers;
 using System.Reactive.Subjects;

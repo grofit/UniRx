@@ -1,10 +1,10 @@
-﻿using System.Reactive.Operators;
+﻿using System.Reactive.Linq;
 using System.Reactive.Schedulers;
 using System.Reactive.Subjects;
 
-namespace System.Reactive.Linq
+namespace System.Reactive.Extensions
 {
-    public static class ObservableBindingExtensions
+    public static partial class ObservableExtensions
     {
         public static IConnectableObservable<T> Multicast<T>(this IObservable<T> source, ISubject<T> subject) => Observable.Multicast(source, subject);
         public static IConnectableObservable<T> Publish<T>(this IObservable<T> source) => Observable.Publish(source);

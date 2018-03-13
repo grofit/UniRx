@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Reactive.Disposables;
+using System.Reactive.Extensions;
 
 namespace System.Reactive.Operators
 {
